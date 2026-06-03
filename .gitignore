@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python caching
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local models (large binaries)
+models/
+*.bin
+*.ftz
+
+# Secret environment configuration (contains HF_TOKEN)
+.env
+
+# Streamlit config / cache
+.streamlit/config.toml
+.streamlit/secrets.toml
+
+# OS files
+.DS_Store
+Thumbs.db

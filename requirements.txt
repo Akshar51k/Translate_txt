@@ -1,0 +1,11 @@
+streamlit
+fasttext-predict
+ctranslate2>=3.11.0
+transformers>=4.33.0
+sentencepiece>=0.1.99
+huggingface_hub
+numpy
+python-dotenv
+torch
+
+
