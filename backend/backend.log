@@ -143,3 +143,4 @@ NameError: name 'total_paragraphs' is not defined. Did you mean: 'final_paragrap
 2026-06-04 16:42:23,187 [INFO] api: Request completed in 79.40 seconds.
 2026-06-04 16:47:12,007 [INFO] api: Received request to translate 20 paragraphs with batch_size=8
 2026-06-04 16:47:12,029 [INFO] api: Starting batch translation of 143 chunks...
+2026-06-04 16:49:27,956 [INFO] api: Request completed in 135.95 seconds.
