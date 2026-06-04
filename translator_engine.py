@@ -1,17 +1,21 @@
 import os
 import sys
 import subprocess
+import logging
+import shutil
 from typing import List, Optional
 import ctranslate2
 from transformers import AutoTokenizer
 from dotenv import load_dotenv
 
+logger = logging.getLogger(__name__)
+
 # Load environment variables from .env file
 load_dotenv()
 
-# Directory where the locally converted CTranslate2 model will be stored
-CT2_MODEL_DIR = "models/nllb-200-ct2-int8"
-# The public Meta model ID — no authentication required
+# Resolve absolute paths dynamically
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CT2_MODEL_DIR = os.path.join(BASE_DIR, "models", "nllb-200-ct2-int8")
 HF_MODEL_ID = "facebook/nllb-200-distilled-600M"
 
 
@@ -100,7 +104,17 @@ class TranslationEngine:
                 progress_callback(
                     "First-time setup: downloading and converting NLLB-200 model..."
                 )
-            _convert_model_to_ct2(CT2_MODEL_DIR, progress_callback)
+            try:
+                _convert_model_to_ct2(CT2_MODEL_DIR, progress_callback)
+            except Exception as e:
+                # Clean up output directory on failure to avoid half-converted states
+                if os.path.exists(CT2_MODEL_DIR):
+                    try:
+                        shutil.rmtree(CT2_MODEL_DIR)
+                    except Exception:
+                        pass
+                logger.error(f"Failed to convert NLLB-200 model to CTranslate2 format: {e}", exc_info=True)
+                raise e
         else:
             if progress_callback:
                 progress_callback("Loading cached CTranslate2 model...")
@@ -208,7 +222,7 @@ class TranslationEngine:
                     translated_results.append(decoded_text.strip())
 
             except Exception as e:
-                print(f"Error during translation batch: {e}")
+                logger.error(f"Error during translation batch: {e}", exc_info=True)
                 for text in batch_texts:
                     translated_results.append(f"[Translation Failed] {text}")
 

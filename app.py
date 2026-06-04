@@ -1,8 +1,27 @@
-from typing import Optional
-import streamlit as st
+import logging
 import os
-from typing import List, Tuple, Dict, Any
+from typing import Optional, List, Tuple, Dict, Any
+import streamlit as st
 from dotenv import load_dotenv
+
+# Resolve base directory relative to the script location
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Configure logging configuration to write to app.log in the project folder
+log_file = os.path.join(BASE_DIR, "app.log")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler(log_file, encoding="utf-8")
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Silence verbose huggingface/transformers logs to keep app.log clean
+logging.getLogger("transformers").setLevel(logging.ERROR)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 # Load environment variables from .env file
 load_dotenv()
@@ -245,7 +264,7 @@ def load_detector() -> LanguageDetector:
     Caches the fastText language detector. If downloading is needed,
     uses a streamlit-safe container to show progress.
     """
-    model_path = "models/lid.176.ftz"
+    model_path = os.path.join(BASE_DIR, "models", "lid.176.ftz")
     if not os.path.exists(model_path):
         # Create UI elements for download progress
         with st.status("Initializing language detector model...", expanded=True) as status:
@@ -387,6 +406,7 @@ def main():
         
         # Trigger Translation Button
         if st.button("🚀 Start Translation Process", type="primary", key="btn_translate"):
+            logger.info(f"Start Translation Process triggered for file: {uploaded_file.name}")
             
             # Step 1: Run Language Detection
             detection_results: List[Tuple[str, float, Optional[str], str]] = []
@@ -436,6 +456,12 @@ def main():
             english_count = sum(1 for iso, conf, _, _ in detection_results if iso == "en" and p.strip())
             low_conf_or_unsupported = total_paragraphs - to_translate_count - english_count
             
+            logger.info(
+                f"Language detection metrics - Total: {total_paragraphs}, "
+                f"To Translate: {to_translate_count}, English (Unchanged): {english_count}, "
+                f"Low Confidence/Unsupported: {low_conf_or_unsupported}"
+            )
+            
             # Render visual metrics
             st.markdown(f"""
                 <div class="metrics-grid">
@@ -464,6 +490,7 @@ def main():
             if to_translate_count > 0:
                 import time
                 start_time = time.time()
+                logger.info(f"Starting batch translation of {to_translate_count} paragraphs with batch_size={batch_size}...")
                 
                 progress_bar = st.progress(0.0)
                 progress_text = st.empty()
@@ -490,6 +517,7 @@ def main():
                         translated_paragraphs_map[idx] = result
                 
                 elapsed_time = time.time() - start_time
+                logger.info(f"Batch translation completed in {elapsed_time:.2f} seconds.")
                 progress_bar.progress(1.0)
                 progress_text.success(f"🎉 Translation completed successfully in {elapsed_time:.2f} seconds!")
                 

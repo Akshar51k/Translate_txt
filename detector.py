@@ -1,7 +1,10 @@
 import os
 import urllib.request
+import logging
 from typing import Tuple, Dict, Any, Optional
 import fasttext
+
+logger = logging.getLogger(__name__)
 
 # Comprehensive mapping of fastText (lid.176.bin) codes to NLLB-200 (FLORES-200) codes and names
 # Some languages detected by fastText may not be supported by NLLB-200, they map to None for NLLB
@@ -215,41 +218,66 @@ class LanguageDetector:
     Wraps the fastText model for language identification and manages mapping
     from fastText labels to NLLB language codes and human-readable names.
     """
-    def __init__(self, model_path: str = "models/lid.176.ftz", progress_callback = None) -> None:
+    def __init__(self, model_path: Optional[str] = None, progress_callback = None) -> None:
         """
         Initializes the LanguageDetector by downloading the model if needed and loading it.
+        Handles base directory resolution.
         """
-        self.model_path = model_path
+        if model_path is None:
+            base_dir = os.path.dirname(os.path.abspath(__file__))
+            self.model_path = os.path.join(base_dir, "models", "lid.176.ftz")
+        else:
+            self.model_path = os.path.abspath(model_path)
+            
         if not os.path.exists(self.model_path):
             self._download_model(progress_callback)
         
         # Load the model using fasttext library
         # silence the warning about load_model from fasttext
+        logger.info(f"Loading fastText language detector model from {self.model_path}...")
         fasttext.FastText.eprint = lambda x: None
         self.model = fasttext.load_model(self.model_path)
 
     def _download_model(self, progress_callback) -> None:
         """
-        Downloads the lid.176.ftz model from fastText's official site.
+        Downloads the lid.176.ftz model from fastText's official site atomically.
         """
         url = "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz"
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req) as response:
-            total_size = int(response.headers.get('content-length', 0))
-            chunk_size = 1024 * 1024  # 1MB chunks
-            downloaded = 0
+        temp_path = self.model_path + ".tmp"
+        logger.info(f"Starting atomic download from {url} to {temp_path}...")
+        
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req) as response:
+                total_size = int(response.headers.get('content-length', 0))
+                chunk_size = 1024 * 1024  # 1MB chunks
+                downloaded = 0
+                
+                with open(temp_path, 'wb') as f:
+                    while True:
+                        chunk = response.read(chunk_size)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                        downloaded += len(chunk)
+                        if progress_callback and total_size > 0:
+                            progress_callback(downloaded / total_size)
             
-            with open(self.model_path, 'wb') as f:
-                while True:
-                    chunk = response.read(chunk_size)
-                    if not chunk:
-                        break
-                    f.write(chunk)
-                    downloaded += len(chunk)
-                    if progress_callback and total_size > 0:
-                        progress_callback(downloaded / total_size)
+            # Atomic swap on success
+            if os.path.exists(self.model_path):
+                os.remove(self.model_path)
+            os.rename(temp_path, self.model_path)
+            logger.info(f"Model download successfully verified and saved to {self.model_path}.")
+        except Exception as e:
+            logger.error(f"Error downloading fastText model: {e}", exc_info=True)
+            if os.path.exists(temp_path):
+                try:
+                    os.remove(temp_path)
+                except Exception:
+                    pass
+            raise e
 
     def detect(self, text: str) -> Tuple[str, float]:
         """
@@ -268,7 +296,8 @@ class LanguageDetector:
             confidence = float(predictions[1][0])
             iso_code = label.replace("__label__", "")
             return iso_code, confidence
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error predicting language for text sample '{cleaned_text[:50]}...': {e}", exc_info=True)
             return "en", 0.0
 
     def get_nllb_code(self, iso_code: str) -> Optional[str]:
