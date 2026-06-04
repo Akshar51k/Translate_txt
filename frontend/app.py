@@ -357,7 +357,7 @@ def main():
         if st.button("🚀 Start Translation Process", type="primary", key="btn_translate", disabled=btn_disabled):
             logger.info(f"Start Translation Process triggered for file: {uploaded_file.name} to {backend_url}")
             
-            with st.spinner("Sending document to translation API... This may take a moment depending on file size."):
+            with st.spinner("Sending document to translation API... Translation may take a moment depending on file size."):
                 try:
                     payload = {
                         "paragraphs": paragraphs,
