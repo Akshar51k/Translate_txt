@@ -329,8 +329,8 @@ def main():
     st.markdown("### 📄 Upload Document")
 
     uploaded_files = st.file_uploader(
-        "Select UTF-8 encoded text files (.txt)", 
-        type=["txt"],
+        "Select files to translate (.txt, .rtf, .pdf)", 
+        type=["txt", "rtf", "pdf"],
         accept_multiple_files=True,
         help="Upload one or more files to translate them sequentially."
     )
@@ -366,14 +366,13 @@ def main():
                 main_progress_text.markdown(f"**Processing file {file_idx + 1} of {len(uploaded_files)}: `{file.name}`...**")
                 
                 try:
-                    file_bytes = file.read()
-                    file.seek(0)  # Reset stream position
-                    content = file_bytes.decode("utf-8")
-                except UnicodeDecodeError:
+                    from file_parser import extract_text
+                    content = extract_text(file)
+                except Exception as e:
                     st.session_state.translation_results[file_key] = {
                         "success": False,
                         "name": file.name,
-                        "error": "Failed to decode UTF-8 format."
+                        "error": f"Failed to extract text: {str(e)}"
                     }
                     continue
                     
@@ -484,10 +483,11 @@ def main():
                         """, unsafe_allow_html=True)
                         
                         # Individual download button
+                        base_name, _ = os.path.splitext(file.name)
                         st.download_button(
-                            label=f"💾 Download {file.name}",
+                            label=f"💾 Download {base_name}_translated.txt",
                             data=translated_text,
-                            file_name=file.name,
+                            file_name=f"{base_name}_translated.txt",
                             mime="text/plain",
                             type="primary",
                             key=f"btn_dl_{file_key}"
