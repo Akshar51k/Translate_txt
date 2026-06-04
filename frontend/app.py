@@ -266,7 +266,7 @@ def main():
     # Backend URL configuration
     backend_url_input = st.sidebar.text_input(
         "Backend API URL",
-        value="http://127.0.0.1:8000",
+        value="https://outlet-stamina-similarly.ngrok-free.dev",
         help="The endpoint where the translation backend (FastAPI) is hosted."
     )
     
@@ -296,15 +296,8 @@ def main():
     st.sidebar.markdown("---")
     st.sidebar.markdown("### ⚙️ Engine Settings")
     
-    # Confidence threshold slider
-    confidence_threshold = st.sidebar.slider(
-        "Detection Confidence Threshold",
-        min_value=0.0,
-        max_value=1.0,
-        value=0.65,
-        step=0.05,
-        help="If fastText detects a language with confidence below this threshold, the paragraph is treated as English and kept unchanged."
-    )
+    # Hardcoded confidence threshold for fastText language detection
+    confidence_threshold = 0.70
     
     # Hardcoded Batch size optimized for parallel translation throughput
     batch_size = 8
