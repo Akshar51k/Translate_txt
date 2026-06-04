@@ -28,3 +28,6 @@ Thumbs.db
 # Logs
 backend/backend.log
 frontend/frontend.log
+
+#old
+Old_sys_trans/

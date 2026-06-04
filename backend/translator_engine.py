@@ -5,7 +5,7 @@ import logging
 import shutil
 import threading
 import re
-from typing import List, Dict
+from typing import List, Dict, Any
 import ctranslate2
 from transformers import AutoTokenizer
 from dotenv import load_dotenv
@@ -220,7 +220,7 @@ class TranslationEngine:
         # --- Step 3: Load tokenizer from the public HuggingFace repo ---
         if progress_callback:
             progress_callback("Loading NLLB-200 tokenizer...")
-        self.tokenizer = AutoTokenizer.from_pretrained(HF_MODEL_ID)
+        self.tokenizer: Any = AutoTokenizer.from_pretrained(HF_MODEL_ID)
 
         if progress_callback:
             progress_callback("Translation engine ready!")

@@ -242,9 +242,7 @@ class LanguageDetector:
             self._download_model(progress_callback)
         
         # Load the model using fasttext library
-        # silence the warning about load_model from fasttext
         logger.info(f"Loading fastText language detector model from {self.model_path}...")
-        fasttext.FastText.eprint = lambda x: None
         self.model = fasttext.load_model(self.model_path)
 
     def _download_model(self, progress_callback) -> None:
@@ -329,5 +327,5 @@ class LanguageDetector:
         """
         lang_info = LANGUAGE_MAP.get(iso_code)
         if lang_info:
-            return lang_info.get("name", "Unknown")
+            return lang_info.get("name", "Unknown") #type: ignore
         return f"Unknown ({iso_code})"

@@ -90,7 +90,7 @@ async def lifespan(app: FastAPI):
                     logger.info("No manual ngrok.exe found. pyngrok will attempt auto-download.")
 
                 ngrok.set_auth_token(ngrok_token)
-                public_url = ngrok.connect(8000).public_url
+                public_url = ngrok.connect("8000").public_url
                 logger.info(f"🚀 Ngrok tunnel established at: {public_url}")
                 print(f"\n✨ PUBLIC STAGING TUNNEL: {public_url} ✨\n")
                 models["ngrok_url"] = public_url
