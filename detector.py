@@ -215,7 +215,7 @@ class LanguageDetector:
     Wraps the fastText model for language identification and manages mapping
     from fastText labels to NLLB language codes and human-readable names.
     """
-    def __init__(self, model_path: str = "models/lid.176.bin", progress_callback = None) -> None:
+    def __init__(self, model_path: str = "models/lid.176.ftz", progress_callback = None) -> None:
         """
         Initializes the LanguageDetector by downloading the model if needed and loading it.
         """
@@ -230,9 +230,9 @@ class LanguageDetector:
 
     def _download_model(self, progress_callback) -> None:
         """
-        Downloads the lid.176.bin model from fastText's official site.
+        Downloads the lid.176.ftz model from fastText's official site.
         """
-        url = "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.bin"
+        url = "https://dl.fbaipublicfiles.com/fasttext/supervised-models/lid.176.ftz"
         os.makedirs(os.path.dirname(self.model_path), exist_ok=True)
         
         req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
@@ -262,14 +262,13 @@ class LanguageDetector:
         if not cleaned_text:
             return "en", 1.0
             
-        predictions = self.model.predict(cleaned_text, k=1)
-        # predictions is like (('__label__fr',), array([0.9832]))
         try:
+            predictions = self.model.predict(cleaned_text, k=1)
             label = predictions[0][0]
             confidence = float(predictions[1][0])
             iso_code = label.replace("__label__", "")
             return iso_code, confidence
-        except (IndexError, AttributeError):
+        except Exception:
             return "en", 0.0
 
     def get_nllb_code(self, iso_code: str) -> Optional[str]:

@@ -96,9 +96,8 @@ On the very first launch:
 
 1. **Upload your Text File:** Drag and drop or upload a `.txt` file encoded in UTF-8.
 2. **Configure Settings (Sidebar):**
-   - **Inference Device:** Select `cpu` (default) or `cuda` if you have a compatible NVIDIA GPU.
    - **Confidence Threshold:** Adjust the minimum language detection confidence. Predictions below this threshold are treated as English and kept unchanged.
-   - **Batch Size:** Configure the level of parallel translation (default: 8).
+   - **Hardware Detection & Batching:** The app automatically detects if a CUDA-enabled GPU is available (falling back to CPU if not) and uses a pre-optimized batch size of `4` suited for CPU and hosted environments (like Streamlit Community Cloud).
 3. **Run:** Click the **🚀 Start Translation Process** button.
 4. **Download Result:** Click the **💾 Download output.txt** button to save your translated document.
 5. **Analyze:** Inspect the paragraph-by-paragraph comparison cards with detected language tags and confidence.

@@ -1,3 +1,4 @@
+from typing import Optional
 import streamlit as st
 import os
 from typing import List, Tuple, Dict, Any
@@ -244,7 +245,7 @@ def load_detector() -> LanguageDetector:
     Caches the fastText language detector. If downloading is needed,
     uses a streamlit-safe container to show progress.
     """
-    model_path = "models/lid.176.bin"
+    model_path = "models/lid.176.ftz"
     if not os.path.exists(model_path):
         # Create UI elements for download progress
         with st.status("Initializing language detector model...", expanded=True) as status:
@@ -253,7 +254,7 @@ def load_detector() -> LanguageDetector:
             
             def progress_callback(pct: float):
                 progress_bar.progress(pct)
-                status_text.text(f"Downloading lid.176.bin... {pct * 100:.1f}%")
+                status_text.text(f"Downloading lid.176.ftz... {pct * 100:.1f}%")
                 
             detector = LanguageDetector(model_path=model_path, progress_callback=progress_callback)
             status.update(label="Language detector ready!", state="complete", expanded=False)
@@ -267,6 +268,8 @@ def load_detector() -> LanguageDetector:
 def load_translator(device: str) -> TranslationEngine:
     """
     Caches the CTranslate2 translation engine.
+    On first run, downloads and converts the public NLLB-200 model to
+    CTranslate2 INT8 format locally for low-latency inference.
     """
     with st.status("Initializing translation engine...", expanded=True) as status:
         status_text = st.empty()
@@ -275,9 +278,7 @@ def load_translator(device: str) -> TranslationEngine:
             status_text.text(msg)
             
         engine = TranslationEngine(
-            model_id="michaelfeil/ct2fast-nllb-200-distilled-600M",
             device=device,
-            compute_type="int8",
             progress_callback=status_callback
         )
         status.update(label="Translation engine ready!", state="complete", expanded=False)
@@ -298,16 +299,18 @@ def main():
         </div>
     """, unsafe_allow_html=True)
     
+    # Automatically detect if GPU (CUDA) is available
+    import ctranslate2
+    try:
+        cuda_available = ctranslate2.get_cuda_device_count() > 0
+    except Exception:
+        cuda_available = False
+    device_option = "cuda" if cuda_available else "cpu"
+    device_display = "GPU (CUDA)" if device_option == "cuda" else "CPU"
+    
     # Sidebar Panel
     st.sidebar.markdown("### ⚙️ Engine Settings")
-    
-    # Device selection (CPU / GPU)
-    device_option = st.sidebar.selectbox(
-        "Inference Device",
-        options=["cpu", "cuda"],
-        index=0,
-        help="Select 'cuda' if you have a compatible NVIDIA GPU and CUDA toolkit installed to accelerate translation."
-    )
+    st.sidebar.info(f"🖥️ **Active Device:** {device_display}")
     
     # Confidence threshold for fastText
     confidence_threshold = st.sidebar.slider(
@@ -319,22 +322,17 @@ def main():
         help="If fastText detects a language with confidence below this threshold, the paragraph is treated as English and kept unchanged."
     )
     
-    # Batch size selection
-    batch_size = st.sidebar.number_input(
-        "Translation Batch Size",
-        min_value=1,
-        max_value=32,
-        value=8,
-        step=1,
-        help="Number of paragraphs translated in parallel. Higher values improve throughput but use more memory."
-    )
+    # Batch size adequate for hosting on Streamlit cloud
+    batch_size = 4
     
     st.sidebar.markdown("---")
     st.sidebar.markdown("### ℹ️ Architecture Details")
     st.sidebar.markdown(
-        """
-        - **Language Detector:** fastText `lid.176.bin` (trained on Wikipedia, Tatoeba, and SETimes).
+        f"""
+        - **Language Detector:** fastText `lid.176.ftz` (lightweight compressed model).
         - **Translation Model:** Meta NLLB-200 Distilled 600M, converted to CTranslate2 INT8 format for efficient CPU/GPU execution.
+        - **Active Device:** {device_display}
+        - **Batch Size:** {batch_size} (optimized for hosting)
         - **Pipeline:** Paragraph splitting -> parallel language detection -> batch translation of non-English segments -> structure-preserving export.
         """
     )
@@ -345,12 +343,12 @@ def main():
         translator = load_translator(device=device_option)
     except Exception as e:
         st.error(f"Failed to load translation pipeline: {e}")
-        st.info("If running on GPU, ensure you have CUDA installed and configured correctly. Otherwise, try switching to 'cpu'.")
+        st.info("Check your Python environment and try running again.")
         return
 
     # Main application space
     if getattr(translator, 'device_fallback', False):
-        st.warning("⚠️ **CUDA Initialization Failed:** The translation engine was unable to initialize on GPU (CUDA). We have automatically fallen back to **CPU** mode. Please ensure CUDA 12.x and compatible GPU drivers are installed if you want GPU acceleration.")
+        st.warning("⚠️ **CUDA Initialization Failed:** The translation engine was unable to initialize on GPU (CUDA). We have automatically fallen back to **CPU** mode.")
 
     st.markdown("### 📄 Upload Document")
 
@@ -373,8 +371,11 @@ def main():
             st.warning("The uploaded file is empty. Please upload a file containing text.")
             return
             
+        # Normalize all types of line endings to standard LF (\n) to prevent paragraph splitting issues on Windows
+        normalized_content = content.replace("\r\n", "\n").replace("\r", "\n")
+        
         # Split text into paragraphs (separated by double newlines)
-        raw_paragraphs = content.split("\n\n")
+        raw_paragraphs = normalized_content.split("\n\n")
         
         # Filter paragraphs: store original and stripped text
         paragraphs: List[str] = []
@@ -398,7 +399,12 @@ def main():
                         # Empty paragraph
                         detection_results.append(("en", 1.0, None, "English"))
                     else:
-                        iso_code, confidence = detector.detect(stripped_p)
+                        # Clean markdown headers/decorations for better language detection accuracy
+                        clean_detect_text = stripped_p
+                        clean_detect_text = clean_detect_text.lstrip("#").strip()
+                        clean_detect_text = clean_detect_text.strip("*_-`")
+                        
+                        iso_code, confidence = detector.detect(clean_detect_text)
                         nllb_code = detector.get_nllb_code(iso_code)
                         lang_name = detector.get_language_name(iso_code)
                         detection_results.append((iso_code, confidence, nllb_code, lang_name))
@@ -456,6 +462,9 @@ def main():
             translated_paragraphs_map: Dict[int, str] = {}
             
             if to_translate_count > 0:
+                import time
+                start_time = time.time()
+                
                 progress_bar = st.progress(0.0)
                 progress_text = st.empty()
                 
@@ -480,8 +489,9 @@ def main():
                     for idx, result in zip(batch_indices, batch_results):
                         translated_paragraphs_map[idx] = result
                 
+                elapsed_time = time.time() - start_time
                 progress_bar.progress(1.0)
-                progress_text.success("🎉 Translation completed successfully!")
+                progress_text.success(f"🎉 Translation completed successfully in {elapsed_time:.2f} seconds!")
                 
             # Step 4: Reassemble final document
             final_paragraphs: List[str] = []
@@ -535,9 +545,9 @@ def main():
             # Step 5: Render Download Panel
             st.markdown("### 📥 Download Results")
             st.download_button(
-                label="💾 Download output.txt",
+                label=f"💾 Download {uploaded_file.name}",
                 data=output_content,
-                file_name="output.txt",
+                file_name=uploaded_file.name,
                 mime="text/plain",
                 type="primary",
                 key="btn_download"
@@ -596,7 +606,9 @@ def main():
                 
             # Render comparison lists
             if html_rows:
-                st.markdown(f'<div class="translation-list">{"".join(html_rows)}</div>', unsafe_allow_html=True)
+                # Remove newlines and carriage returns so Streamlit's markdown parser does not treat indented HTML as code blocks
+                clean_html = "".join(html_rows).replace("\n", "").replace("\r", "")
+                st.markdown(f'<div class="translation-list">{clean_html}</div>', unsafe_allow_html=True)
             else:
                 st.info("No content paragraphs to compare.")
                 
