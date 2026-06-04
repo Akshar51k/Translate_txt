@@ -1,7 +1,7 @@
 import os
 import urllib.request
 import logging
-from typing import Tuple, Dict, Any, Optional
+from typing import Tuple, Dict, Optional
 import fasttext
 
 logger = logging.getLogger(__name__)

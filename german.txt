@@ -1,0 +1,844 @@
+Leitthema
+Knie J.
+https://doi.org/10.1007/s43205-025-00320-y
+Angenommen: 7. März 2025
+© The Author(s) 2025
+Meniskustransplantation
+Indikation, Technik und Ergebnisse
+Philipp W. Winkler1 · Florian Dirisamer2,3
+1Universitätsklinik für Orthopädie und Traumatologie, Kepler UniversitätsklinikumGmbH, Johannes
+Kepler Universität Linz, Linz, Österreich
+2Praxis MOVE, Puchenau, Österreich
+3Klinik Diakonissen Linz, Linz, Österreich
+In diesem Beitrag
+– Indikationen und Kontraindikationen
+– PräoperativePlanungundoperativeDurch-
+führung
+Präoperative Vorbereitung · Größen-
+bestimmung · Transplantatwahl ·
+Operative Technik · Rehabilitation
+– Klinische Ergebnisse, „Return to Sport“,
+Überlebensrate und Komplikationen
+– Finanzielle Vergütung und rechtliche Si-
+tuation
+QR-Codescannen&Beitragonlinelesen
+Zusammenfassung
+Ein Meniskusverlust bei jungen Patient:innen kann aufgrund der herausragenden
+Funktionen der Menisken verehrende Folgen wie Schmerzen und Bewegungs-
+einschränkungen mit folglich reduzierter sportlicher Leistungsfähigkeit und
+Lebensqualität nach sich ziehen. Die Therapie eines totalen Meniskusverlusts stellt
+Chirurg:innen vor eine große Herausforderung. Die Meniskusallografttransplantation
+(MAT) ist eine gut etablierte und evidenzbasierte Behandlungsmethode zur Therapie
+eines symptomatischen totalen Meniskusverlusts. Eine strenge Indikationsstellung
+stellt den Grundpfeiler zum Behandlungserfolg dar. Im Rahmen der präoperativen
+Vorbereitung sollten begleitende Verletzungen/Pathologien sowie vorliegende
+Risikofaktoren erkannt und gegebenenfalls adressiert werden. Bei korrekter Pati-
+ent:innenselektion können bei der MAT durchaus zufriedenstellende und langfristige
+Verbesserungen sämtlicher klinischer und funktioneller Ergebnisse erwartet werden.
+Auch die Teilnahme an sportlichen Aktivitäten ist nach einer MAT möglich, wobei hier
+häug eine Reduktion des Aktivitätsniveaus zu verzeichnen ist. Trotz der vielverspre-
+chenden Ergebnisse muss bedacht werden, dass es sich bei der MAT um ein Salvage-
+Verfahren handelt. Reoperationen bis hin zum Gelenkersatz sind im Verlauf (>10 Jahre)
+häug nötig. Dies sollte im Rahmen des Beratungsgesprächs berücksichtigt werden.
+Schlüsselwörter
+Meniskusverlust · Allograft · Rekonstruktion · Gelenkerhalt · Indikation
+Hintergrund
+Die schwerwiegenden Folgen eines to-
+talen Meniskusverlusts mit Veränderung
+der tibiofemoralen Kontaktmechanik, der
+Kniegelenkskinematik und der daraus re-
+sultierenden rasch progredienten Dege-
+neration des Kniegelenks mit dem End-
+stadium der Kniegelenksarthrose stellen
+große therapeutische Herausforderungen
+dar [13].
+Die
+Meniskusallografttransplantation
+(MAT) stellt ein seit Jahrzenten etabliertes
+Verfahren zur Therapie von Patient:innen
+mit totalem Meniskusverlust dar. Es lie-
+gen sowohl kurz- als auch langfristige
+und durchaus überzeugende klinische
+Ergebnisse vor [15]. Dennoch stehen viele
+Orthopäd:innen mit großer Skepsis der
+MAT gegenüber. Dies kann einerseits auf
+diebislangnur limitiertenNachweise, dass
+die MAT die Arthroseprogression stoppt,
+andererseits auf die teils beträchtlichen
+nanziellen und rechtlichen Herausforde-
+rungen der MAT zurückgeführt werden
+[11, 24].
+Ziel dieses Leitthemenbeitrags ist es,
+Indikationen
+und
+Kontraindikationen,
+die präoperative Planung, die operative
+Durchführung mit hilfreichen Tipps und
+wichtigen Fallstricken sowie klinische Er-
+gebnisse inklusive Überlebensraten und
+Komplikationen der MAT zu beleuchten.
+Durch diesen Beitrag sollen kniechirur-
+gisch versierte Orthopäd:innen zur MAT
+ermutigt werden.
+Knie Journal 1
+
+Leitthema
+Tab. 1
+Indikationen und Kontraindikationen zur Meniskusallografttransplantation
+Indikationen
+Kontraindikationen
+SymptomatischerMeniskusverlust
+Instabilitäten
+UnikompartimentellerMeniskus-
+verlust
+Extraartikuläre Beinachsendeformität (>3–5° varus/
+valgus)a
+Altera <50 Jahre
+Arthrose (Kellgren-Lawrence Grad 4)
+BMIa <30kg/m2
+Floride Infektion
+Patient:innencompliance
+Entzündlich-rheumatische Gelenkerkrankung
+BMI Body-Mass-Index
+aNichtevidenzbasierte Empfehlung der Autoren
+Indikationen und Kontra-
+indikationen
+Die ideale Patientin/der ideale Patient für
+eine MAT leidet an einem symptomati-
+schen unikompartimentellen Meniskus-
+verlust ohne begleitende Knorpelschä-
+den und ligamentäre Instabilitäten, ist
+<50 Jahre alt, ist nicht adipös und be-
+sitzt in der Ganzbeinstandaufnahme eine
+neutrale Beinachse [18]. Es sei anzumer-
+ken, dass die Altersangabe eine relative
+Indikation/Kontraindikation darstellt. Bei
+guten biologischen Verhältnissen können
+auch Patient:innen >50 Jahre in Betracht
+gezogen werden.
+In der täglichen klinischen Praxis sind
+jedoch selten Idealpatient:innen anzutref-
+fen. Der Großteil der Patient:innen, diesich
+für eine MAT eignen, hatten zum Zeit-
+punkt der MAT im Durchschnitt bereits
+mehr als zwei Operationen am Indexknie
+[25]. Des Weiteren werden Begleitverlet-
+zungen,vorallemVerletzungendesvorde-
+ren Kreuzbandes (VKB), Beinachsendefor-
+mitäten und bereits bestehende degene-
+rative Veränderungen häug beobachtet
+[25, 26].
+Bestehende Instabilitäten, hochgradi-
+ge Beinachsendeformitäten (>5° Varus-/
+Valgusdeformität), eine fortgeschrittene
+Kniegelenksarthrose
+(Kellgren-Lawrence
+Grad4),orideInfektionensowieentzünd-
+lich-rheumatische
+Gelenkerkrankungen
+stellen allgemeine Kontraindikationen zur
+MAT dar (. Tab. 1; [18]).
+Fokale Knorpelschäden (Outerbridge
+Grad IV) werden häug als Kontrain-
+dikation bzw. Grenzindikation zur MAT
+angeführt [18]. Dies konnte durch eine
+rezente
+systematische
+Übersichtsarbeit
+widerlegt werden. Anhand von 26 einge-
+schlossenen Studien mit in Summe 1031
+Patient:innen
+konnte gezeigt
+werden,
+dass die Durchführung einer begleiten-
+den Knorpeltherapie im Rahmen der MAT
+die klinischen Ergebnisse, die Kompli-
+kations- und die Versagensraten nach
+mindestens 2 Jahren Follow-up nicht re-
+levant beeinusst. Allerdings konnten bei
+Patient:innen mit kombinierter MAT und
+Knorpeltherapie wesentlich häuger Re-
+operationen im Vergleich zu Patient:innen
+mit isolierter MAT beobachtet werden
+(12–83% vs. 4–31%; [8]).
+Dierenzierter sollte das Vorliegen de-
+generativer Veränderungen im Sinne einer
+Kniegelenksarthrosebeider Planungeiner
+MAT betrachtet werden. In einer Vielzahl
+von Studien wird eine fortgeschrittene Ar-
+throse als Kontraindikation zur MAT ange-
+sehen. In einer kürzlich veröentlichten
+Studie konnte ein 28-fach erhöhtes Risiko
+eines Transplantatversagens nach MAT bei
+Patient:innenmitfortgeschrittenerArthro-
+se (Kellgren-Lawrence Grad 3 und 4) im
+Vergleich zu geringer Arthrose (Kellgren-
+Lawrence Grad 0, 1 und 2) im Indexkom-
+partiment zum Zeitpunkt der MAT nach-
+gewiesen werden [26]. Eine weitere Studie
+untersuchte klinische Langzeitergebnisse
+(Minimum 10 Jahre Follow-up) bei 47 Pati-
+ent:innen die sich mit geringer bis mode-
+rater Arthrose (Kellgren-Lawrence Grad 2
+und 3) einer MAT unterzogen. Einerseits
+konnte eine Verbesserung der Schmerz-
+symptomatik und der Kniegelenksfunkti-
+on verzeichnet werden. Andererseits zeig-
+te sich vom mittel- bis zum langfristigen
+Follow-up eine Abnahme der klinischen
+Scores und eine relevante Rate an chir-
+urgischem (11%) und klinischem (32%)
+Therapieversagen [17].
+Zusammenfassend lässt sich festhal-
+ten, dass die MAT idealerweise bei Pati-
+ent:innen ohne degenerative Vorschäden
+durchgeführt wird. Die MAT kann jedoch
+als „Slavage-Verfahren“ mit zufriedenstel-
+lenden mittel- bis langfristigen Ergeb-
+nissen bei Patient:innen mit geringer bis
+moderater Arthrose (Kellgren-Lawrence
+Grad <4) durchgeführt werden. Bei Pati-
+ent:innen mit einer Arthrose vom Grad 4
+sollte eine MAT nicht mehr in Betracht
+gezogen werden.
+» Bei einer Grad-4-Arthrose sollte
+eine MAT nicht mehr in Betracht
+gezogen werden
+Ein häug diskutiertes Thema im Rah-
+men der MAT ist der Einuss von Bein-
+achsendeformitäten auf klinische Ergeb-
+nisse sowie Versagens- und Komplikati-
+onsraten. Bis dato liegen keine Grenzwer-
+te vor, ab welchen eine Korrekturosteo-
+tomie einen klinischen Vorteil bringt. Aus
+Sicht der Autoren sollte eine Osteotomie
+bei einer extraartikulären kniegelenksna-
+hen Varus-/Valgusdeformität von 3–5° in
+Betracht gezogen werden. Trotz vielver-
+sprechender Ergebnisse nach kombinier-
+ter MAT und Korrekturosteotomie ist bis-
+lang unklar, ob die Kombination beider
+Eingrie von klinischem Vorteil ist. Die-
+se Ungewissheit wird durch eine aktuell
+laufende randomisiert kontrollierte Studie
+(Vergleich MATplus Osteotomie vs. isolier-
+te Osteotomie) hoentlich zeitnah geklärt
+werden[28]. Das inder ligamentärenKnie-
+chirurgie aktuell viel diskutierte sagittale
+Alignment und hier insbesondere der pos-
+teriore tibiale Slope scheint aktuellen Da-
+ten zufolge bei der MAT keinen relevanten
+Einuss zu haben [26].
+Aus Sicht der Autoren spielt auch die
+knöcherne Morphologie des distalen Fe-
+murs eine wesentliche Rolle und sollte bei
+der Indikationsstellung einer MAT berück-
+sichtigt werden. Dieser Thematik wurde
+bislangnurunzureichendAufmerksamkeit
+geschenkt und stellt großes Potenzial für
+zukünftige Forschungsarbeiten dar.
+DieIndikationzurMATsolltefürjedePa-
+tientin/jeden Patienten individuell getrof-
+fen werden. Es sollte jedoch festgehalten
+werden, dass eine strenge Indikationsstel-
+lung und die strikte Patient:innenselektion
+die Grundpfeiler zum Behandlungserfolg
+bei der MAT darstellen.
+2
+Knie Journal
+
+Leitthema
+Tab. 2
+Rehabilitation nach isolierter Meniskusallografttransplantation
+Postoperativer
+Zeitraum
+Maßnahme
+Belastung
+Entlastung
+Bewegungsumfanga
+0-0-60°
+Brace
+4-Punkt-Hartrahmenorthese
+Woche 1 und 2
+Physiotherapie
+Mobilisation. Kryokompression.
+Belastung
+Teilbelastung in Streckstellung.
+Bewegungsumfanga
+0-0-60°
+Brace
+4-Punkt-Hartrahmenorthese
+Woche 3 und 4
+Physiotherapie
+Mobilisation. Kryokompression.
+Belastung
+Vollbelastung in Streckstellung.
+Bewegungsumfanga
+0-0-90°
+Brace
+4-Punkt-Hartrahmenorthese
+Woche 5 und 6
+Physiotherapie
+Mobilisation. Kryokompression.
+Belastung
+SchmerzadaptierteAufbelastung.
+Bewegungsumfang
+Frei
+Brace
+Keine
+Physiotherapie
+Sensomotorisches Training, Kraftaufbau.
+Woche 7 bis 12
+Sport
+Fahrradergometer
+Monat 4 bis 6
+Sport
+Laufband, Fahrrad
+Monat 7 bis 12
+Sport
+SportartspezischesTraining; kein Kontakt- oder
+Risikosport; keine pivotierenden Sportarten.
+Ab Monat 12
+Sport
+Volle Sportrückkehr.
+aDer Bewegungsumfang richtet sich nach der Neutral-Null-Methode (Extension/Flexion)
+Präoperative Planung und
+operative Durchführung
+Präoperative Vorbereitung
+Im Rahmen der präoperativen Vorberei-
+tung sollte eine umfassende klinische Un-
+tersuchungerfolgen.DiesehatzumZiel,In-
+stabilitäten, Bewegungseinschränkungen
+und möglicherweise vorliegende Kontrak-
+turen (z.B.: nicht korrigierbare intraartiku-
+läreVarusdeformität)zuerfassenundkann
+sich an dem International Knee Documen-
+tation Committee (IKDC) Knee Examinati-
+on Form orientieren.
+Die apparative Diagnostik sollte Stan-
+dardröntgenaufnahmen (anterior-posteri-
+or, streng lateral, Patella tangential), ei-
+ne Ganzbeinaufnahme der betreenden
+Extremität sowie eine Magnetresonanz-
+tomographie (MRT) des zu operierenden
+Kniegelenks umfassen. Bei gewissen Fra-
+gestellungenkanndieComputertomogra-
+phie (CT) weitere nützliche Hinweise lie-
+fern (z.B.: Bohrkanallage früherer Opera-
+tionen). Im Falle vorbestehender degene-
+rative Veränderungen sollte die Anferti-
+gung von Varus- und Valgusstressaufnah-
+men in Betracht gezogen werden.
+Im Falle eines Knochen-auf-Knochen-
+Kontakts im Indexkompartiment sollte
+nach Überprüfung der entsprechenden
+Indikationen und Kontraindikationen die
+Implantation eines unikondylären oder
+bikondylären Oberächenersatzes in Er-
+wägung gezogen werden.
+Größenbestimmung
+Zur
+Größenbestimmung
+des
+Menis-
+kustransplantates kommen verschieden
+Methoden zur Anwendung. Die bekann-
+teste Methode wurde von Pollard et al.
+[16] beschrieben und orientiert sich an der
+anterior-posterioren und mediolateralen
+Ausdehnung gemessen an konventionel-
+lenRöntgenbildern. DieseMethodewurde
+von Yoon et al. [27] modiziert und zeigt
+eine vergleichbare Genauigkeit in der
+Größenbestimmung des Meniskus im Ver-
+gleich zu MRT-basierten Messmethoden
+(54% vs. 65%; [2]).
+Transplantatwahl
+DieTransplantatwahlorientiertsichanden
+regionalen Verfügbarkeiten und gesetzli-
+chen Vorschriften des jeweiligen Landes.
+Im Allgemeinen werden kryokonservier-
+te, „fresh-frozen“, lyophilisierte und frische
+Meniskustransplantate unterschieden [14,
+18]. Von der Konservierung abzugrenzen
+sind die Methoden der Sterilisation. Die
+SterilisierungderTransplantatedientdazu,
+das Risiko einer Krankheitsübertragung zu
+minimieren. Hier besteht die Möglichkeit
+der Bestrahlung (z.B.: Gamma-Sterilisati-
+on) und der chemischen Sterilisation (z.B.:
+Ethylenoxid, Peressigsäure-Ethanol; [9, 14,
+18]). Unterschiede zeigen sich in dem -
+nanziellen und logistischen Aufwand, der
+Gefahr der Krankheitsübertragung, dem
+Anteil lebensfähiger Zellen sowie den bio-
+mechanischenEigenschaftennachKonser-
+vierung und Sterilisation.
+Operative Technik
+Die MAT wird in der Regel rein arthro-
+skopisch oder arthroskopisch assistiert
+durchgeführt. Nachdem die Indikation
+intraoperativ bestätigt wurde, muss das
+entsprechende Kompartiment gereinigt
+und der Restmeniskus entfernt werden.
+Im Anschluss muss der anatomische
+Footprint der nativen anterioren und pos-
+terioren Meniskuswurzel identiziert und
+transossäre Bohrungen angelegt werden.
+Shuttelfäden werden vorgelegt, wodurch
+dasMeniskustransplantatspäterindasGe-
+lenk eingezogen werden kann. In weiterer
+Folge erfolgt die Fixation des Meniskus-
+körpers mit einer Kombination aus All-
+inside- und Inside-out-Nähten wie aus
+der
+herkömmlichen
+Meniskuschirurgie
+bekannt.
+Bei der Fixation der Meniskuswurzeln
+kann prinzipiell die „Suture-only-Technik“
+von der „Bone-block-Technik“ unterschie-
+den werden. Der Unterschied besteht da-
+rin, dass, wie der Name bereits sugge-
+riert, bei der Bone-block-Technik ein tibia-
+ler Knochenblock an den Meniskuswur-
+zeln belassen wird. Dies soll der besseren
+Einheilung („bone-to-bone healing“) die-
+nen. Eine Sonderform stellt die sogenann-
+te „Bridge-in-slot-Technik“ dar. Bei dieser
+Technik wird eine von der anterioren bis
+zur posterioren Meniskuswurzel reichen-
+Knie Journal 3
+
+Leitthema
+Abb. 1 9 Media-
+le Meniskusallo-
+grafttransplanta-
+tion (MAT) in der
+Suture-only-Tech-
+nik und Revisions-
+rekonstruktion des
+vorderen Kreuzban-
+des in einem linken
+Kniegelenk.Korona-
+re (A) und sagittale
+(B) MRT-Bildervor
+(A1,B1) und 3 Mo-
+nate nach (A2, B2)
+medialerMAT. Ar-
+throskopischerBlick
+in das mediale Kom-
+partiment vor (C1)
+und nach (C2) me-
+dialerMAT.MFCme-
+dialer Femurkondy-
+lus, MTP mediales
+Tibiaplateau; Pfeil
+Meniskusallograft
+de Knochenbrücke („bridge“) in eine vor-
+präparierte Knochennut („slot“) xiert. Die
+Bridge-in-slot-Technik ndet in aller Re-
+gel nur bei der lateralen MAT Anwendung
+[10]. Technische Einzelheiten können sich
+zwischen medialer und lateraler MAT un-
+terscheiden. . Abb. 1 zeigt ein Fallbespiel
+einer medialen MAT.
+Rehabilitation
+Die postoperative Nachsorge nach einer
+MAT sollte individuell festgelegt werden
+und sich an begleitenden Eingrien wie
+knorpelregenerativen Verfahren, Bandre-
+konstruktionenundKorrekturosteotomien
+orientieren. Im Falle einer isolierten MAT
+empfehlen die Autoren das in . Tab. 2
+angeführteNachbehandlungsprotokoll.Es
+ist anzumerken, dass aktuelle Studien auf
+Vorteile eines beschleunigten bzw. pro-
+gressiveren Rehabilitationsprotokolls mit
+frühzeitigemBelastungsaufbau(2Wochen
+postoperativ) hinweisen [19]. Die Evidenz-
+lage dazu ist jedoch bislang limitiert, wes-
+halb die Entscheidung zu einem progres-
+siverem Belastungsaufbau der betreuen-
+den Chirurgin/dem betreuenden Chirur-
+gen vorbehalten bleiben sollte.
+Klinische Ergebnisse, „Return
+to Sport“, Überlebensrate und
+Komplikationen
+In zahlreichen Studien konnten die klini-
+schen und biomechanischen Eekte einer
+MAT nachgewiesen werden. Die Implanta-
+tion eines Meniskustransplantates vergrö-
+ßert die tibiofemorale Kontaktäche und
+führt damit zu einer Reduktion des tibiofe-
+moralen Kontaktdrucks [3]. Dadurch kann
+eine unphysiologische Belastung des Ge-
+lenkknorpels vermieden werden, was sich
+in einem chondroprotektiven Eekt der
+MAT äußert [23]. In einer klinischen Ko-
+hortenstudiekonntenacheinem mittleren
+Follow-upvon11,3Jahrenfestgestelltwer-
+den, dass die MAT einen chondroprotek-
+tiven Eekt und weniger Gelenkspaltver-
+schmälerungzurFolgehatalseineMenisk-
+ektomie [23]. In einer Subgruppenanalyse
+wurdebeobachtet, dass eineExtrusiondes
+Meniskustransplantates von ≥3mm zu ei-
+nem kompletten Verlust des chondropro-
+tektiven Eekts führt, was auf die klinische
+Relevanz der häug beobachteten Menis-
+kusextrusion nach MAT hinweist [23]. Aus
+der Literatur geht hervor, dass sowohl die
+nicht-anatomische Positionierung der Me-
+niskuswurzeln als auch die „Suture-only-
+Technik“ mit einem erhöhten Risiko einer
+postoperativen Meniskusextrusion assozi-
+iert sind [5, 12, 20].
+» Eine aktuelle Studie zeigt die
+Notwendigkeit einer intensiven
+Rehabilitation
+Neben dem chondroprotektiven Eekt
+konnten in vielen weiteren Studien sig-
+nikante und langanhaltende Verbes-
+serungen
+klinischer
+und funktioneller
+Ergebnisse nachgewiesen werden [1, 6, 7,
+15, 17]. Eine Kohortenstudie, in welcher
+21 Patient:innen randomisiert (MAT vs.
+personalisierte Physiotherapie) wurden
+und 15 Patient:innen die Therapie frei
+wählten, zeigte nach 12 Monaten Follow-
+up eine Überlegenheit der MAT bei Be-
+trachtung der Patient-Reorted Outcome
+Measures (PROMs; [22]). Diese vorläugen
+Daten dienten als Grundlage für eine
+aktuell laufende randomisiert kontrol-
+lierte Multicenterstudie (MeTeOR2) zum
+Vergleich der MAT und einer personali-
+sierten Physiotherapie bei Patient:innen
+mit symptomatischen Meniskusverlust [4].
+Eine Metaanalyse konnte zeigen, dass so-
+wohl die mediale als auch die laterale MAT
+zu zufriedenstellenden Ergebnissen führt.
+Bei ähnlicher mittel- und langfristiger
+Überlebensrate wurde jedoch ersichtlich,
+dass die Schmerzsymptomatikund PROMs
+nach lateraler MAT signikant besser wa-
+ren als nach medialer MAT [6]. Hinsichtlich
+der Fixationstechnik der Meniskuswurzeln
+konnten keine Unterschiede in klinischen
+Ergebnissen und Überlebensraten festge-
+stellt werden. Allerdings wurde auällig,
+dass die „Suture-only-Technik“ im Ver-
+gleich zur „Bone-block-Technik“ mit einer
+vermehrten postoperativen Meniskusex-
+trusion sowie einer höheren Rate von
+4
+Knie Journal
+
+Leitthema
+Wurzelverletzungen assoziiert ist [12, 20,
+25].
+Ein symptomatischer Meniskusverlust
+trithäugjungeundsportlichaktivePati-
+ent:innen. Dementsprechend ist die Nach-
+frage nach sportlichen Aktivitäten nach ei-
+ner MAT groß. Eine rezente systematische
+Übersichtsarbeit konnte anhand von 670
+Patient:inneneineRückkehrzusportlichen
+Aktivitäten in 20–92% der Patient:innen
+nach durchschnittlich 8–17 Monaten post-
+operativ zeigen [1]. Von den Patient:innen,
+die zu sportlichen Aktivitäten zurückkehr-
+ten, konnten 7–100% zu dem gleichen Ni-
+veau wie vor der Verletzung zurückkehren
+[1].Esmussangemerktwerden,dassessich
+beideneingeschlossenenStudienum Fall-
+serien handelt („level of evidence“ IV) und
+die große Variabilität unter den Studien
+nur mäßigen Rückschluss auf die tatsäch-
+liche Sportrückkehr nach MAT zulässt. Des
+Weiteren konnte eine aktuelle Studie die
+Notwendigkeit einer intensiven Rehabili-
+tationzur Verbesserungder isokinetischen
+Muskelkraft und der posturalen Stabilität
+zeigen und warnt vor einer frühzeitigen
+Sportrückkehr [7].
+Das mittlere Überleben nach MAT
+variiert in verschiedenen Studien teil-
+weise beträchtlich und ist abhängig von
+der Denition des Versagens (Konver-
+sion zum Gelenkersatz, Revisions-MAT,
+partielle oder komplette Resektion des
+Meniskusallografts,
+Revisionsoperation,
+Lysholm Score <65 Punkte etc.), Be-
+gleitpathologien (Beinachsendeformität,
+Knorpelschäden, Instabilitäten, Arthrose-
+grad etc.), Begleiteingrien (Osteotomie,
+Knorpeltherapie, Bandrekonstruktion etc.)
+undnichtzuletztvomFollow-up-Zeitraum.
+Zusammenfassend können Überlebens-
+raten von 48–100%, 32–98%, 13–90%,
+13–87% und 13–71% nach 2, 5, 10, 15
+und 20 Jahren Follow-up erwartet werden
+[6, 8, 11, 25].
+Die Komplikationsrate nach MAT sollte
+nicht unterschätzt werden und umfasst
+einen
+reduzierten
+Bewegungsumfang
+bis zur Arthrobrose (0–28%), persistie-
+rende Schmerzen und Schwellneigung
+(0–25%),
+Risse
+im
+Meniskusallograft
+(11–32%),
+postoperative
+Infektionen
+(2–8%),
+schmerzhaftes
+Fremdmaterial
+(bis zu 15%) bis hin zum fulminanten
+Kompartmentsyndrom (1%) [8, 25].
+Finanzielle Vergütung und
+rechtliche Situation
+Die nanzielle Vergütung und rechtliche
+Situation der MAT stellt in vielen Ländern
+eine große Herausforderung dar [24]. Hier-
+beiseiauf spezischdafür verfassteArtikel
+verwiesen [21].
+Fazit für die Praxis
+4 Die
+Meniskusallografttransplantation
+(MAT) ist eine etablierte und evidenz-
+basierte Methode zur Therapie des symp-
+tomatischen totalen Meniskusverlusts.
+4 Eine strenge Indikationsstellung und Pati-
+ent:innenselektion stellen die Grundpfei-
+ler zum Behandlungserfolg dar.
+4 Der postoperative Belastungsaufbau und
+die Rehabilitation sollte schrittweise und
+dosiert erfolgen, um ein frühzeitiges
+Transplantatversagen zu vermeiden.
+4 Signiﬁkante und langanhaltende Verbes-
+serungen in klinischen und funktionellen
+Ergebnissen sind nach MAT zu erwarten.
+4 Sportliche Aktivitäten nach MAT sind
+möglich.
+4 Die MAT stellt ein Salvage-Verfahren dar.
+Mit Reoperationen bis hin zum Gelenker-
+satz ist im Verlauf (>10 Jahre) zu rechnen.
+Korrespondenzadresse
+PD Dr. med. Philipp W. Winkler
+Universitätsklinik für Orthopädie und
+Traumatologie, Kepler Universitätsklinikum
+GmbH, Johannes Kepler Universität Linz
+Krankenhausstraße 9, 4020 Linz, Österreich
+Philipp.Winkler@kepleruniklinikum.at
+Funding. Open access funding provided by Johan-
+nes Kepler University Linz.
+Einhaltung ethischer Richtlinien
+Interessenkonﬂikt. P.W.WinklerundF.Dirisamer
+gebenan,dasskeinInteressenkoniktbesteht.
+FürdiesenBeitragwurdenvondenAutor/-innen
+keineStudienanMenschenoderTierendurchgeführt.
+FürdieaufgeführtenStudiengeltendiejeweilsdort
+angegebenenethischenRichtlinien.
+Open Access.DieserArtikelwirdunterderCreative
+CommonsNamensnennung4.0 InternationalLizenz
+veröentlicht,welchedieNutzung, Vervielfältigung,
+Bearbeitung, VerbreitungundWiedergabeinjegli-
+chemMediumundFormaterlaubt,sofernSieden/die
+ursprünglichenAutor(en)unddieQuelleordnungsge-
+mäßnennen,einenLinkzurCreativeCommonsLizenz
+beifügenundangeben,obÄnderungenvorgenom-
+menwurden.DieindiesemArtikelenthaltenenBilder
+undsonstigesDrittmaterialunterliegenebenfallsder
+genanntenCreativeCommonsLizenz,sofernsichaus
+derAbbildungslegendenichtsanderesergibt.Sofern
+dasbetreendeMaterialnichtunterdergenannten
+CreativeCommons Lizenz stehtunddiebetreende
+HandlungnichtnachgesetzlichenVorschriftenerlaubt
+ist,istfürdieobenaufgeführtenWeiterverwendun-
+gendesMaterialsdieEinwilligungdesjeweiligen
+Rechteinhaberseinzuholen.WeitereDetailszurLizenz
+entnehmenSiebittederLizenzinformationaufhttp://
+creativecommons.org/licenses/by/4.0/deed.de.
+Literatur
+1. Ahmed AF, Rinaldi J, Noorzad AS, Zikria BA
+(2022) Return to Sports Following Meniscal
+Allograft Transplantation Is Possible but Remains
+Questionable: A Systematic Review. Arthroscopy
+38:1351–1361
+2. Ambra LF, Kaleka CC, Debieux P, Almeida JC,
+Shah N, Cohen M, Gomoll A (2020) Radiographic
+Methods Are as Accurate as Magnetic Resonance
+Imaging for Graft Sizing Before Lateral Meniscal
+Transplantation.AmJSportsMed48:3534–3540
+3. Ambra LF, Mestriner AB, Ackermann J, Mameri ES,
+Gomoll AH (2024) Load Distribution After Serial
+Resection of the Posterior Horn of the Lateral
+Meniscus and Subsequent Meniscal Allograft
+Transplant: A Biomechanical Study. Am J Sports
+Med52:2775–2781
+4. ArnoldS,SpaldingT,ParsonsH,BeardD,BradleyH,
+CrisfordP,EllardDR, FerreiraM,GetgoodA, GuckJ,
+Haque A, Khan I, Mason J, Milroy B, Myers P,
+Parker D, Price AJ, Smith A, Smith NA, Smith T,
+Stewart K, Underwood M, Verdonk P, Metcalfe A
+(2024) Meniscal Transplant surgery or Optimised
+Rehabilitation full randomised trial (MeTeOR2):
+astudyprotocol.BMJOpen14:e85125
+5. Beel W, Firth AD, Tulloch S, Abdelrehman T,
+Olotu O, Bryant D, Getgood A (2025) Extrusion
+After Meniscal Allograft Transplantation Is Lower
+or Equal With Bony Compared With Soft-Tissue
+Root Fixation: A Systematic Review. Arthroscopy
+41:785–797.e782
+6. Bin SI, Nha KW, Cheong JY, Shin YS (2018)
+Midterm and Long-term Results of Medial Versus
+LateralMeniscalAllograftTransplantation:AMeta-
+analysis.AmJSportsMed46:1243–1250
+7. Cho SI, Yoo JS, Moon SG, Kang JH, Yang SJ,
+Kim JG, Lee DW (2025) Serial Changes in
+Muscle Strength and Dynamic Balance After
+Lateral Meniscal Allograft Transplantation:
+A Retrospective Cohort Study of 55 Patients.
+Am J Sports Med. https://doi.org/10.1177/
+036354652513177413635465251317741
+8. Dzidzishvili L, Allahabadi S, Jackson GR, Gonza-
+lez AS, Sachdev D, Mekhail J, Cole BJ, Chahla J
+(2025) Concomitant Cartilage Procedures With
+Meniscal Allograft Transplantation Do Not Sub-
+Knie Journal 5
+
+stantially Alter Failure or Survival Rates Relative
+to Meniscal Allograft Transplantation Without
+Cartilage Procedures: A Systematic Review.
+Am J Sports Med. https://doi.org/10.1177/
+036354652413054103635465241305410
+9. Eras V, Graunder J, Ahmed N, Brune JC (2021)
+Inuenceofperaceticacid-ethanolsterilisationon
+thebiomechanicalpropertiesofhumanmeniscus
+transplants.JExpOrthop8:18
+10. Getgood A, Farr J, Gomoll AH (2018) Meniscal
+Allograft Transplantation Techniques. In: Farr J,
+Gomoll A (Hrsg) Cartilage Restoration. Springer,
+Cham,S343–369(2018)
+11. Lee J, Kim JM, Lee BS, Bin SI, Jeon T, Kim D,
+Bae K (2024) Long-Term Results of Meniscus
+AllograftTransplantationWithBoneFixationShow
+Improved Outcomes but Progression of Joint
+Space Narrowing, Osteoarthritis, and Cartilage
+Degeneration. Arthroscopy. https://doi.org/10.
+1016/j.arthro.2024.09.026
+12. Leite CBG, Merkely G, Zgoda M, Farina EM,
+GörtzS,HowardJ,LattermannC(2023)Systematic
+Review of Clinical Results After Medial Meniscus
+Allograft Transplantation Reveals Improved
+PatientReportedOutcomesatGreaterThan5Years
+Follow-Up.Arthroscopy39:802–811
+13. McDermott ID, Amis AA (2006) The conse-
+quences of meniscectomy. J Bone Joint Surg Br
+88:1549–1556
+14. Mickiewicz P, Binkowski M, Bursig H, Wróbel Z
+(2014) Preservation and sterilization methods
+of the meniscal allografts: literature review. Cell
+TissueBank15:307–317
+15. Novaretti JV, Patel NK, Lian J, Vaswani R, de Sa D,
+Getgood A, Musahl V (2019) Long-Term Survival
+Analysis and Outcomes of Meniscal Allograft
+Transplantation With Minimum 10-Year Follow-
+Up:ASystematicReview.Arthroscopy35:659–667
+16. Pollard ME, Kang Q, Berg EE (1995) Radiographic
+sizing for meniscal transplantation. Arthroscopy
+11:684–687
+17. Romandini I, Grassi A, Lucidi AG, Filardo G,
+Zaagnini S (2024) 10-Year Survival and Clinical
+Improvement of Meniscal Allograft Transplantati-
+on in Early to Moderate Knee Osteoarthritis.Am J
+SportsMed52:1997–2007
+18. RossoF,BisicchiaS,BonasiaDE,AmendolaA(2015)
+Meniscal allograft transplantation: a systematic
+review.AmJSportsMed43:998–1007
+19. Rucinski K, Stannard JP, Crecelius C, Nuelle C,
+Cook JL (2024) Accelerated versus Standard Reha-
+bilitationafterMeniscusAllograftTransplantation
+intheKnee.JKneeSurg37:710–717
+20. Samitier G, Alentorn-Geli E, Taylor DC, Rill B,
+Lock T, Moutzouros V, Kolowich P (2015) Meniscal
+allografttransplantation.Part1:systematicreview
+of graft biology, graft shrinkage, graft extrusion,
+graft sizing, and graft xation. Knee Surg Sports
+TraumatolArthrosc23:310–322
+21. ScheerS,PrußA,HacklW,WaiblB(2019)Verwen-
+dungvonAllografts.Arthroskopie32:392–401
+22. Smith NA, Parsons N, Wright D, Hutchinson C,
+Metcalfe A, Thompson P, Costa ML, Spalding T
+(2018) A pilot randomized trial of meniscal
+allograft transplantation versus personalized
+physiotherapy for patients with a symptomatic
+meniscaldecientkneecompartment.BoneJointJ
+100-b:56–63
+23. Wang DY, Zhang B, Li YZ, Meng XY, Jiang D, Yu JK
+(2022) The Long-term Chondroprotective Eect
+of Meniscal Allograft Transplant: A 10- to 14-Year
+Follow-upStudy.AmJSportsMed50:128–137
+24. Winkler PW, Faber S, Balke M, MetzlaS,
+Niethammer TR, Roessler PP, Henkelmann R,
+Abstract
+Meniscus allograft transplantation. Indication, surgical technique, and
+outcomes
+Meniscus loss in young patients can have devastating consequences due to the
+critical role of the human meniscus in the native knee joint. Meniscus loss can lead to
+symptoms like pain and restricted movement of the knee joint, resulting in decreased
+physical activity and a reduction in quality of life. Treatment of total meniscus loss
+challenges surgeons all over the world. Meniscus allograft transplantation (MAT)
+is a well-established and evidence-based treatment option for symptomatic total
+meniscus loss. Strict indication criteria form the cornerstone of treatment success.
+Preoperative diagnostic work-up should identify concomitant injuries/pathologies and
+pre-existing risk factors. With proper patient selection, MAT can achieve satisfactory
+and long-term improvements in all clinical and functional outcomes. Participation
+in sports/physical activity is still possible after MAT, although a lower activity level is
+often observed. Despite promising results, it must be considered that MAT is a salvage
+procedure. Reoperations, including joint replacement, are frequently required over
+time (>10 years). This should be taken into account during patient counseling.
+Keywords
+Meniscus loss · Allograft · Reconstruction · Joint preservation · Indications
+Kurme A, Colcuc S, Zimmermann G, Petersen W,
+Diermeier TA (2022) Germany has a high demand
+inmeniscalallografttransplantationbutissubject
+to health economic and legal challenges: a survey
+of the German Knee Society. Knee Surg Sports
+TraumatolArthrosc30:2352–2357
+25. Winkler PW, Wagala NN, Hughes JD, Irrgang JJ,
+Fu FH, Musahl V (2021) Association Between
+Meniscal Allograft Tears and Early Surgical
+Meniscal Allograft Failure. Am J Sports Med
+49:3302–3311
+26. Winkler PW, Wagala NN, Hughes JD, Musahl V
+(2023) High-grade preoperative osteoarthritis of
+the index compartment is a major predictor of
+meniscal allograft failure. Arch Orthop Trauma
+Surg143:399–407
+27. Yoon JR, Kim TS, Lim HC, Lim HT, Yang JH (2011)
+Is radiographic measurement of bony landmarks
+reliable for lateral meniscal sizing? Am J Sports
+Med39:582–589
+28. Zanasi L, Boa A, De Marziani L, Lisignoli G,
+Belvedere C, Miceli M, Zaagnini S, Filardo G, Di
+Martino A (2024) Knee osteotomy combined with
+meniscalallografttransplantationversuskneeos-
+teotomyaloneinpatientswithunicompartmental
+knee osteoarthritis: a prospective double-blind
+randomised controlled trial protocol. BMJ Open
+14:e87552
+Hinweis des Verlags. Der Verlag bleibt in Hinblick
+auf geograsche Zuordnungen und Gebietsbezeich-
+nungen in veröentlichten Karten und Instituts-
+adressen neutral.
+6
+Knie Journal

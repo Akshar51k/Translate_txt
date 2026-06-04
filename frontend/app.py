@@ -2,23 +2,36 @@ import logging
 import os
 import requests
 import time
-from typing import Optional, List, Dict, Any
+from logging.handlers import RotatingFileHandler
 import streamlit as st
 from dotenv import load_dotenv
 
 # Resolve base directory relative to the script location
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Configure logging configuration
+# Configure logging with RotatingFileHandler to prevent disk space exhaustion in production
 log_file = os.path.join(BASE_DIR, "frontend.log")
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler(log_file, encoding="utf-8")
-    ]
+log_formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+
+# Setup console handler
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(log_formatter)
+
+# Setup rotating file handler (10MB limit per file, maximum 5 backup files)
+file_handler = RotatingFileHandler(
+    log_file, 
+    maxBytes=10 * 1024 * 1024, 
+    backupCount=5, 
+    encoding="utf-8"
 )
+file_handler.setFormatter(log_formatter)
+
+# Initialize root logger configuration
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.INFO)
+root_logger.addHandler(console_handler)
+root_logger.addHandler(file_handler)
+
 logger = logging.getLogger(__name__)
 
 # Load environment variables

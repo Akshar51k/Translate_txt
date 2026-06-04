@@ -3,7 +3,9 @@ import sys
 import subprocess
 import logging
 import shutil
-from typing import List, Optional
+import threading
+import re
+from typing import List, Dict
 import ctranslate2
 from transformers import AutoTokenizer
 from dotenv import load_dotenv
@@ -106,6 +108,8 @@ class TranslationEngine:
         self.compute_type = compute_type
         self.device_used = device
         self.device_fallback = False
+        # Thread safety lock to serialize tokenizer writes (such as self.tokenizer.src_lang)
+        self.lock = threading.Lock()
 
         # --- Step 1: Convert model if not already done ---
         model_bin_path = os.path.join(CT2_MODEL_DIR, "model.bin")
@@ -189,38 +193,120 @@ class TranslationEngine:
         if not texts:
             return []
 
-        translated_results: List[str] = []
         target_lang = "eng_Latn"
+        
+        # Adaptive Beam Size configuration based on active hardware to optimize CPU latency vs GPU throughput
+        # - GPU (CUDA): beam_size = 4 (maximizes translation quality)
+        # - CPU: beam_size = 2 (reduces workload by 2x, providing low latency with high accuracy)
+        beam_size = 4 if self.device_used == "cuda" else 2
+        
+        # Smart Semantic Splitter threshold (in words)
+        # Paragraphs under this limit remain untouched to preserve contextual translation quality
+        max_words = 200
 
-        # Process in batches for maximum throughput
-        for i in range(0, len(texts), batch_size):
-            batch_texts = texts[i : i + batch_size]
-            batch_src_langs = src_langs[i : i + batch_size]
+        flat_texts: List[str] = []
+        flat_src_langs: List[str] = []
+        
+        # Maps original paragraph index to list of indices in flat_texts
+        paragraph_map: Dict[int, List[int]] = {}
 
-            # Prepare batch tokens
-            batch_tokens: List[List[str]] = []
-            for text, src_lang in zip(batch_texts, batch_src_langs):
-                # Set the source language on the tokenizer dynamically
+        # Universal sentence splitter supporting Latin, Cyrillic, Asian, Arabic, and Sanskrit scripts
+        # Splits on standard punctuation followed by whitespace/newlines or direct line breaks
+        def split_into_sentences(text: str) -> List[str]:
+            # Regex splits on:
+            # - .!? (Latin/Cyrillic)
+            # - 。！？ (Chinese/Japanese/Korean)
+            # - । (Hindi/Sanskrit danda)
+            # - ؟ (Arabic/Persian question mark)
+            # followed by whitespace or line breaks
+            sentences = re.split(r'(?<=[.!?。！？।؟])\s+|\n+', text)
+            return [s.strip() for s in sentences if s.strip()]
+
+        # ----------------- Step 1: Smart Semantic Splitter (Flattening) -----------------
+        for p_idx, (text, lang) in enumerate(zip(texts, src_langs)):
+            words = text.split()
+            if len(words) <= max_words:
+                # If paragraph is within safe limits, translate it as a single chunk
+                flat_texts.append(text)
+                flat_src_langs.append(lang)
+                paragraph_map[p_idx] = [len(flat_texts) - 1]
+            else:
+                # Split large paragraphs on sentence boundaries
+                sentences = split_into_sentences(text)
+                chunks = []
+                current_chunk = []
+                current_count = 0
+                
+                for s in sentences:
+                    s_words = len(s.split())
+                    # Group sentences into sub-chunks up to max_words to retain local context
+                    if current_count + s_words > max_words:
+                        if current_chunk:
+                            # Join sentences with space
+                            chunks.append(" ".join(current_chunk))
+                        current_chunk = [s]
+                        current_count = s_words
+                    else:
+                        current_chunk.append(s)
+                        current_count += s_words
+                if current_chunk:
+                    chunks.append(" ".join(current_chunk))
+                    
+                # Safe Fallback: If a single sentence exceeds max_words and contains no punctuation,
+                # split strictly by word count to protect the NLLB-200 context limits
+                processed_chunks = []
+                for chunk in chunks:
+                    chunk_words = chunk.split()
+                    if len(chunk_words) > max_words:
+                        for i in range(0, len(chunk_words), 150):
+                            processed_chunks.append(" ".join(chunk_words[i : i + 150]))
+                    else:
+                        processed_chunks.append(chunk)
+                        
+                indices = []
+                for chunk in processed_chunks:
+                    flat_texts.append(chunk)
+                    flat_src_langs.append(lang)
+                    indices.append(len(flat_texts) - 1)
+                paragraph_map[p_idx] = indices
+
+        # ----------------- Step 2: Parallel Batch Translation -----------------
+        flat_results: List[str] = []
+        
+        # Send the entire list of chunks to CTranslate2 in a single call.
+        # This allows CTranslate2 to perform global length sorting to minimize padding,
+        # distribute execution across physical CPU cores, and run native batching.
+        # Uses thread-safety lock because setting self.tokenizer.src_lang is stateful.
+        batch_tokens: List[List[str]] = []
+        with self.lock:
+            for text, src_lang in zip(flat_texts, flat_src_langs):
                 self.tokenizer.src_lang = src_lang
-                # Tokenize text and get token strings
                 tokens = self.tokenizer.convert_ids_to_tokens(
                     self.tokenizer.encode(text)
                 )
                 batch_tokens.append(tokens)
 
-            # Target prefix instructs the model to translate to English
-            target_prefixes = [[target_lang] for _ in batch_texts]
+        target_prefixes = [[target_lang] for _ in flat_texts]
+        
+        try:
+            # Execute CTranslate2 batch translation with optimized parameters:
+            # - beam_size: Adaptive (4 on GPU, 2 on CPU)
+            # - max_batch_size: Configured batch limit
+            # - max_decoding_length: 1024 (native NLLB capacity to prevent truncation)
+            # - repetition_penalty: 1.1 (discourages repetitive outputs)
+            # - no_repeat_ngram_size: 4 (mathematically prevents word repetition looping)
+            results = self.translator.translate_batch(
+                batch_tokens,
+                target_prefix=target_prefixes,
+                beam_size=beam_size,
+                max_batch_size=batch_size,
+                max_decoding_length=1024,
+                repetition_penalty=1.1,
+                no_repeat_ngram_size=4,
+            )
 
-            try:
-                # Run CTranslate2 batch translation
-                results = self.translator.translate_batch(
-                    batch_tokens,
-                    target_prefix=target_prefixes,
-                    beam_size=4,
-                    max_decoding_length=256,
-                )
-
-                # Decode the translations
+            # Decode the translations back to string outputs under tokenizer lock
+            with self.lock:
                 for result in results:
                     translated_tokens = result.hypotheses[0]
                     translated_ids = self.tokenizer.convert_tokens_to_ids(
@@ -229,11 +315,24 @@ class TranslationEngine:
                     decoded_text = self.tokenizer.decode(
                         translated_ids, skip_special_tokens=True
                     )
-                    translated_results.append(decoded_text.strip())
+                    flat_results.append(decoded_text.strip())
 
-            except Exception as e:
-                logger.error(f"Error during translation batch: {e}", exc_info=True)
-                for text in batch_texts:
-                    translated_results.append(f"[Translation Failed] {text}")
+        except Exception as e:
+            logger.error(f"Error during translation batch: {e}", exc_info=True)
+            for text in flat_texts:
+                flat_results.append(f"[Translation Failed] {text}")
+
+        # ----------------- Step 3: Format-Aware Reassembly (Unflattening) -----------------
+        translated_results: List[str] = []
+        for p_idx in range(len(texts)):
+            chunk_indices = paragraph_map[p_idx]
+            chunk_translations = [flat_results[idx] for idx in chunk_indices]
+            original_text = texts[p_idx]
+            
+            # Preserve original visual layout: join with newlines if they existed in the source
+            if "\n" in original_text:
+                translated_results.append("\n".join(chunk_translations))
+            else:
+                translated_results.append(" ".join(chunk_translations))
 
         return translated_results
