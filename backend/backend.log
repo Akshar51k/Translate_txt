@@ -19,3 +19,6 @@
 2026-06-04 13:43:44,989 [INFO] api: Received request to translate 22 paragraphs with batch_size=8
 2026-06-04 13:43:44,998 [INFO] api: Starting batch translation of 21 paragraphs...
 2026-06-04 13:44:21,019 [INFO] api: Request completed in 36.03 seconds.
+2026-06-04 13:51:02,056 [INFO] api: Received request to translate 22 paragraphs with batch_size=8
+2026-06-04 13:51:02,062 [INFO] api: Starting batch translation of 21 paragraphs...
+2026-06-04 13:51:39,684 [INFO] api: Request completed in 37.63 seconds.
