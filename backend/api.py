@@ -53,12 +53,50 @@ async def lifespan(app: FastAPI):
         models["detector"] = LanguageDetector()
         models["translator"] = TranslationEngine(device=device_option)
         logger.info("Models loaded successfully.")
+        
+        # Automatically establish Ngrok tunnel if NGROK_TOKEN is set
+        ngrok_token = os.getenv("NGROK_TOKEN")
+        if ngrok_token:
+            logger.info("NGROK_TOKEN detected. Setting up public tunnel...")
+            try:
+                from pyngrok import ngrok, conf
+                
+                # Check for manual ngrok.exe in backend/ or parent directory to bypass proxy download blocks
+                local_ngrok = os.path.join(BASE_DIR, "ngrok.exe")
+                parent_ngrok = os.path.join(os.path.dirname(BASE_DIR), "ngrok.exe")
+                
+                if os.path.exists(local_ngrok):
+                    conf.get_default().ngrok_path = local_ngrok
+                    logger.info(f"Using manual ngrok binary at: {local_ngrok}")
+                elif os.path.exists(parent_ngrok):
+                    conf.get_default().ngrok_path = parent_ngrok
+                    logger.info(f"Using manual ngrok binary at: {parent_ngrok}")
+                else:
+                    logger.info("No manual ngrok.exe found. pyngrok will attempt auto-download.")
+
+                ngrok.set_auth_token(ngrok_token)
+                public_url = ngrok.connect(8000).public_url
+                logger.info(f"🚀 Ngrok tunnel established at: {public_url}")
+                print(f"\n✨ PUBLIC STAGING TUNNEL: {public_url} ✨\n")
+                models["ngrok_url"] = public_url
+            except ImportError:
+                logger.warning("pyngrok package not found. Run 'pip install pyngrok' to enable auto-tunneling.")
+            except Exception as tunnel_err:
+                logger.error(f"Failed to establish ngrok tunnel: {tunnel_err}")
+                
     except Exception as e:
         logger.critical(f"Failed to load models during startup: {e}", exc_info=True)
         raise e
     yield
     # Clean up
     logger.info("Shutting down api...")
+    if "ngrok_url" in models:
+        try:
+            from pyngrok import ngrok
+            ngrok.kill()
+            logger.info("Ngrok tunnel terminated.")
+        except Exception:
+            pass
     models.clear()
 
 app = FastAPI(
