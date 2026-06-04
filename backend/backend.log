@@ -54,3 +54,92 @@
 2026-06-04 16:06:18,147 [INFO] api: Received request to translate 6 paragraphs with batch_size=8
 2026-06-04 16:06:18,158 [INFO] api: Starting batch translation of 5 paragraphs...
 2026-06-04 16:07:46,651 [INFO] api: Request completed in 88.50 seconds.
+2026-06-04 16:25:29,937 [INFO] api: Shutting down api...
+2026-06-04 16:25:56,595 [INFO] api: Initializing models on startup...
+2026-06-04 16:25:56,595 [INFO] api: Detected device: CPU
+2026-06-04 16:25:56,595 [INFO] detector: Loading fastText language detector model from C:\Users\khatraks\Downloads\Trans\backend\models\lid.176.ftz...
+2026-06-04 16:26:00,414 [INFO] api: Models loaded successfully.
+2026-06-04 16:26:00,414 [INFO] api: NGROK_TOKEN detected. Setting up public tunnel...
+2026-06-04 16:26:00,414 [WARNING] api: pyngrok package not found. Run 'pip install pyngrok' to enable auto-tunneling.
+2026-06-04 16:26:29,948 [INFO] api: Received request to translate 6 paragraphs with batch_size=8
+2026-06-04 16:26:29,966 [INFO] api: Starting batch translation of 16 chunks...
+2026-06-04 16:28:01,565 [INFO] api: Request completed in 91.62 seconds.
+2026-06-04 16:28:01,567 [ERROR] api: Unhandled exception in request to /translate: name 'total_paragraphs' is not defined
+Traceback (most recent call last):
+  File "D:\Programs x86\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "D:\Programs x86\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Programs x86\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Programs x86\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\routing.py", line 680, in app
+    await route.handle(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\routing.py", line 276, in handle
+    await self.app(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\fastapi\routing.py", line 134, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "D:\Programs x86\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "D:\Programs x86\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "D:\Programs x86\Lib\site-packages\fastapi\routing.py", line 120, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\fastapi\routing.py", line 674, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\fastapi\routing.py", line 330, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\starlette\concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\anyio\to_thread.py", line 61, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\anyio\_backends\_asyncio.py", line 2525, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "D:\Programs x86\Lib\site-packages\anyio\_backends\_asyncio.py", line 986, in run
+    result = context.run(func, *args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\khatraks\Downloads\Trans\backend\api.py", line 341, in translate_text
+    "total": total_paragraphs,
+             ^^^^^^^^^^^^^^^^
+NameError: name 'total_paragraphs' is not defined. Did you mean: 'final_paragraphs'?
+2026-06-04 16:33:10,825 [INFO] api: Shutting down api...
+2026-06-04 16:33:21,008 [INFO] api: Initializing models on startup...
+2026-06-04 16:33:21,008 [INFO] api: Detected device: CPU
+2026-06-04 16:33:21,008 [INFO] detector: Loading fastText language detector model from C:\Users\khatraks\Downloads\Trans\backend\models\lid.176.ftz...
+2026-06-04 16:33:24,199 [INFO] api: Models loaded successfully.
+2026-06-04 16:33:24,199 [INFO] api: NGROK_TOKEN detected. Setting up public tunnel...
+2026-06-04 16:33:24,199 [WARNING] api: pyngrok package not found. Run 'pip install pyngrok' to enable auto-tunneling.
+2026-06-04 16:33:33,558 [INFO] api: Received request to translate 6 paragraphs with batch_size=8
+2026-06-04 16:33:33,574 [INFO] api: Starting batch translation of 16 chunks...
+2026-06-04 16:34:55,598 [INFO] api: Request completed in 82.04 seconds.
+2026-06-04 16:38:41,687 [INFO] api: Initializing models on startup...
+2026-06-04 16:38:41,687 [INFO] api: Detected device: CPU
+2026-06-04 16:38:41,688 [INFO] detector: Loading fastText language detector model from C:\Users\khatraks\Downloads\Trans\backend\models\lid.176.ftz...
+2026-06-04 16:38:45,445 [INFO] api: Models loaded successfully.
+2026-06-04 16:38:45,445 [INFO] api: NGROK_TOKEN detected. Setting up public tunnel...
+2026-06-04 16:38:45,446 [WARNING] api: pyngrok package not found. Run 'pip install pyngrok' to enable auto-tunneling.
+2026-06-04 16:40:42,363 [INFO] api: Shutting down api...
+2026-06-04 16:40:53,938 [INFO] api: Initializing models on startup...
+2026-06-04 16:40:53,939 [INFO] api: Detected device: CPU
+2026-06-04 16:40:53,939 [INFO] detector: Loading fastText language detector model from C:\Users\khatraks\Downloads\Trans\backend\models\lid.176.ftz...
+2026-06-04 16:40:57,066 [INFO] api: Models loaded successfully.
+2026-06-04 16:40:57,066 [INFO] api: NGROK_TOKEN detected. Setting up public tunnel...
+2026-06-04 16:40:57,066 [WARNING] api: pyngrok package not found. Run 'pip install pyngrok' to enable auto-tunneling.
+2026-06-04 16:41:03,788 [INFO] api: Received request to translate 6 paragraphs with batch_size=8
+2026-06-04 16:41:03,803 [INFO] api: Starting batch translation of 58 chunks...
+2026-06-04 16:42:23,187 [INFO] api: Request completed in 79.40 seconds.
+2026-06-04 16:47:12,007 [INFO] api: Received request to translate 20 paragraphs with batch_size=8
+2026-06-04 16:47:12,029 [INFO] api: Starting batch translation of 143 chunks...

@@ -45,7 +45,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 load_dotenv()
 
 from detector import LanguageDetector
-from translator_engine import TranslationEngine
+from translator_engine import TranslationEngine, split_paragraph_into_chunks
 
 # Models will be loaded inside lifespan
 models = {}
@@ -187,104 +187,148 @@ def translate_text(req: TranslationRequest):
 
     start_time = time.time()
     paragraphs = req.paragraphs
+    total_paragraphs = len(paragraphs)
     confidence_threshold = req.confidence_threshold
     batch_size = req.batch_size
 
-    logger.info(f"Received request to translate {len(paragraphs)} paragraphs with batch_size={batch_size}")
+    logger.info(f"Received request to translate {total_paragraphs} paragraphs with batch_size={batch_size}")
 
-    # Step 1: Run Language Detection
-    detection_results: List[Tuple[str, float, Optional[str], str]] = []
-    for p in paragraphs:
+    # Step 1: Split paragraphs into semantic chunks first
+    flat_chunks: List[str] = []
+    # Maps paragraph index to a list of its chunk indices in flat_chunks
+    paragraph_chunks_map: Dict[int, List[int]] = {}
+    
+    for p_idx, p in enumerate(paragraphs):
         stripped_p = p.strip()
         if not stripped_p:
-            detection_results.append(("en", 1.0, None, "English"))
-        else:
-            # Clean markdown headers/decorations for better language detection accuracy
-            clean_detect_text = stripped_p
-            clean_detect_text = clean_detect_text.lstrip("#").strip()
-            clean_detect_text = clean_detect_text.strip("*_-`")
+            paragraph_chunks_map[p_idx] = []
+            continue
             
+        chunks = split_paragraph_into_chunks(stripped_p)
+        indices = []
+        for chunk in chunks:
+            flat_chunks.append(chunk)
+            indices.append(len(flat_chunks) - 1)
+        paragraph_chunks_map[p_idx] = indices
+
+    # Step 2: Run Language Detection on each individual chunk
+    chunk_detections: List[Tuple[str, float, Optional[str], str]] = []
+    for chunk in flat_chunks:
+        # Clean markdown headers/decorations for better language detection accuracy
+        clean_detect_text = chunk.lstrip("#").strip().strip("*_-`")
+        if not clean_detect_text:
+            chunk_detections.append(("en", 1.0, None, "English"))
+        else:
             iso_code, confidence = detector.detect(clean_detect_text)
             nllb_code = detector.get_nllb_code(iso_code)
             lang_name = detector.get_language_name(iso_code)
-            detection_results.append((iso_code, confidence, nllb_code, lang_name))
+            chunk_detections.append((iso_code, confidence, nllb_code, lang_name))
 
-    # Step 2: Identify segments that require translation
-    paragraphs_to_translate: List[str] = []
-    indices_to_translate: List[int] = []
+    # Step 3: Identify chunks that require translation
+    chunks_to_translate: List[str] = []
+    chunk_indices_to_translate: List[int] = []
     src_langs_to_translate: List[str] = []
 
-    for idx, p in enumerate(paragraphs):
-        stripped_p = p.strip()
-        if not stripped_p:
-            continue
-            
-        iso_code, confidence, nllb_code, _ = detection_results[idx]
-        
+    for idx, chunk in enumerate(flat_chunks):
+        iso_code, confidence, nllb_code, _ = chunk_detections[idx]
         if iso_code != "en" and confidence >= confidence_threshold and nllb_code is not None:
-            paragraphs_to_translate.append(stripped_p)
-            indices_to_translate.append(idx)
+            chunks_to_translate.append(chunk)
+            chunk_indices_to_translate.append(idx)
             src_langs_to_translate.append(nllb_code)
 
-    # Calculate metrics
-    total_paragraphs = len(paragraphs)
-    to_translate_count = len(paragraphs_to_translate)
-    english_count = sum(1 for idx, (iso, conf, _, _) in enumerate(detection_results) if iso == "en" and paragraphs[idx].strip())
-    low_conf_or_unsupported = total_paragraphs - to_translate_count - english_count
-
-    # Step 3: Run Batch Translation
-    translated_paragraphs_map: Dict[int, str] = {}
-    if to_translate_count > 0:
-        logger.info(f"Starting batch translation of {to_translate_count} paragraphs...")
+    # Step 4: Run Batch Translation on selected chunks
+    translated_chunks_map: Dict[int, str] = {}
+    if chunks_to_translate:
+        logger.info(f"Starting batch translation of {len(chunks_to_translate)} chunks...")
         batch_results = translator.translate_batch(
-            texts=paragraphs_to_translate,
+            texts=chunks_to_translate,
             src_langs=src_langs_to_translate,
             batch_size=batch_size
         )
-        # Store results mapped to original indices
-        for idx, result in zip(indices_to_translate, batch_results):
-            translated_paragraphs_map[idx] = result
+        for idx, result in zip(chunk_indices_to_translate, batch_results):
+            translated_chunks_map[idx] = result
 
-    # Step 4: Reassemble final document & comparison data
+    # Step 5: Reassemble final document & comparison data
+    final_flat_chunks: List[str] = []
+    for idx, chunk in enumerate(flat_chunks):
+        if idx in translated_chunks_map:
+            final_flat_chunks.append(translated_chunks_map[idx])
+        else:
+            final_flat_chunks.append(chunk)
+
     final_paragraphs: List[str] = []
     comparison_data = []
+    
+    translated_paragraphs_count = 0
+    english_paragraphs_count = 0
+    low_conf_or_unsupported_paragraphs_count = 0
 
-    for idx, original_p in enumerate(paragraphs):
-        iso_code, confidence, nllb_code, lang_name = detection_results[idx]
+    for p_idx, original_p in enumerate(paragraphs):
+        chunk_indices = paragraph_chunks_map[p_idx]
         
-        if idx in translated_paragraphs_map:
-            translated_text = translated_paragraphs_map[idx]
-            final_paragraphs.append(translated_text)
+        if not chunk_indices:
+            final_paragraphs.append(original_p)
             comparison_data.append({
-                "num": idx + 1,
+                "num": p_idx + 1,
                 "original": original_p,
-                "translated": translated_text,
+                "translated": original_p,
+                "lang": "N/A",
+                "code": None,
+                "confidence": 0.0,
+                "action": "Empty",
+                "reason": "Empty Paragraph"
+            })
+            continue
+
+        paragraph_sub_translations = [final_flat_chunks[idx] for idx in chunk_indices]
+        
+        if "\n" in original_p:
+            translated_p = "\n".join(paragraph_sub_translations)
+        else:
+            translated_p = " ".join(paragraph_sub_translations)
+            
+        final_paragraphs.append(translated_p)
+
+        translated_chunk_indices = [idx for idx in chunk_indices if idx in translated_chunks_map]
+        
+        if translated_chunk_indices:
+            first_translated_idx = translated_chunk_indices[0]
+            iso_code, confidence, nllb_code, lang_name = chunk_detections[first_translated_idx]
+            comparison_data.append({
+                "num": p_idx + 1,
+                "original": original_p,
+                "translated": translated_p,
                 "lang": lang_name,
                 "code": nllb_code,
                 "confidence": confidence,
                 "action": "Translated"
             })
+            translated_paragraphs_count += 1
         else:
-            final_paragraphs.append(original_p)
-            action_label = "Skipped" if original_p.strip() else "Empty"
+            first_chunk_idx = chunk_indices[0]
+            iso_code, confidence, nllb_code, lang_name = chunk_detections[first_chunk_idx]
             
-            if not original_p.strip():
-                reason = "Empty Paragraph"
-            elif iso_code == "en":
+            if iso_code == "en":
                 reason = "English"
+                code_label = "eng_Latn"
+                english_paragraphs_count += 1
             elif confidence < confidence_threshold:
                 reason = f"Low Confidence ({lang_name} @ {confidence * 100:.0f}%)"
+                code_label = nllb_code
+                low_conf_or_unsupported_paragraphs_count += 1
             else:
                 reason = "Unsupported Language"
+                code_label = nllb_code
+                low_conf_or_unsupported_paragraphs_count += 1
                 
             comparison_data.append({
-                "num": idx + 1,
+                "num": p_idx + 1,
                 "original": original_p,
                 "translated": original_p,
-                "lang": lang_name if original_p.strip() else "N/A",
-                "code": "eng_Latn" if iso_code == "en" else None,
-                "confidence": confidence if original_p.strip() else 0.0,
-                "action": action_label,
+                "lang": lang_name,
+                "code": code_label,
+                "confidence": confidence,
+                "action": "Skipped",
                 "reason": reason
             })
 
@@ -296,9 +340,9 @@ def translate_text(req: TranslationRequest):
         "translated_text": output_content,
         "metrics": {
             "total": total_paragraphs,
-            "to_translate": to_translate_count,
-            "english_unchanged": english_count,
-            "low_confidence_or_other": low_conf_or_unsupported
+            "to_translate": translated_paragraphs_count,
+            "english_unchanged": english_paragraphs_count,
+            "low_confidence_or_other": low_conf_or_unsupported_paragraphs_count
         },
         "comparison_data": comparison_data,
         "device_used": translator.device_used,

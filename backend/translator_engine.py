@@ -79,6 +79,59 @@ def _convert_model_to_ct2(output_dir: str, progress_callback=None) -> None:
             ) from e2
 
 
+def split_paragraph_into_chunks(text: str, max_words: int = 50) -> List[str]:
+    """
+    Splits a paragraph into smaller semantic chunks (sentences or word groups)
+    if it exceeds the max_words limit.
+
+    Args:
+        text: Input paragraph text.
+        max_words: Maximum number of words allowed per chunk.
+
+    Returns:
+        List of chunks (strings).
+    """
+    words = text.split()
+    if len(words) <= max_words:
+        return [text]
+
+    # Universal sentence splitter supporting Latin, Cyrillic, Asian, Arabic, and Sanskrit scripts
+    # Splits on standard punctuation followed by whitespace/newlines or direct line breaks
+    sentences = re.split(r'(?<=[.!?。！？।؟])\s+|\n+', text)
+    sentences = [s.strip() for s in sentences if s.strip()]
+
+    chunks = []
+    current_chunk = []
+    current_count = 0
+
+    for s in sentences:
+        s_words = len(s.split())
+        # Group sentences into sub-chunks up to max_words to retain local context
+        if current_count + s_words > max_words:
+            if current_chunk:
+                chunks.append(" ".join(current_chunk))
+            current_chunk = [s]
+            current_count = s_words
+        else:
+            current_chunk.append(s)
+            current_count += s_words
+    if current_chunk:
+        chunks.append(" ".join(current_chunk))
+
+    # Safe Fallback: If a single sentence exceeds max_words and contains no punctuation,
+    # split strictly by word count to protect the NLLB-200 context limits
+    processed_chunks = []
+    for chunk in chunks:
+        chunk_words = chunk.split()
+        if len(chunk_words) > max_words:
+            for i in range(0, len(chunk_words), max_words):
+                processed_chunks.append(" ".join(chunk_words[i : i + max_words]))
+        else:
+            processed_chunks.append(chunk)
+
+    return processed_chunks
+
+
 class TranslationEngine:
     """
     Manages the CTranslate2 translation engine and Hugging Face tokenizer.
@@ -179,13 +232,13 @@ class TranslationEngine:
         batch_size: int = 8,
     ) -> List[str]:
         """
-        Translates a list of texts from their respective source languages
+        Translates a list of pre-split text chunks from their respective source languages
         to English using CTranslate2 batch inference.
 
         Args:
-            texts: List of paragraphs to translate.
+            texts: List of text chunks to translate.
             src_langs: List of NLLB language codes (e.g. 'fra_Latn').
-            batch_size: Number of paragraphs to translate in parallel.
+            batch_size: Number of chunks to translate in parallel.
 
         Returns:
             List of translated English strings in the same order.
@@ -200,93 +253,20 @@ class TranslationEngine:
         # - CPU: beam_size = 2 (reduces workload by 2x, providing low latency with high accuracy)
         beam_size = 4 if self.device_used == "cuda" else 2
         
-        # Smart Semantic Splitter threshold (in words)
-        # Paragraphs under this limit remain untouched to preserve contextual translation quality
-        max_words = 200
-
-        flat_texts: List[str] = []
-        flat_src_langs: List[str] = []
-        
-        # Maps original paragraph index to list of indices in flat_texts
-        paragraph_map: Dict[int, List[int]] = {}
-
-        # Universal sentence splitter supporting Latin, Cyrillic, Asian, Arabic, and Sanskrit scripts
-        # Splits on standard punctuation followed by whitespace/newlines or direct line breaks
-        def split_into_sentences(text: str) -> List[str]:
-            # Regex splits on:
-            # - .!? (Latin/Cyrillic)
-            # - 。！？ (Chinese/Japanese/Korean)
-            # - । (Hindi/Sanskrit danda)
-            # - ؟ (Arabic/Persian question mark)
-            # followed by whitespace or line breaks
-            sentences = re.split(r'(?<=[.!?。！？।؟])\s+|\n+', text)
-            return [s.strip() for s in sentences if s.strip()]
-
-        # ----------------- Step 1: Smart Semantic Splitter (Flattening) -----------------
-        for p_idx, (text, lang) in enumerate(zip(texts, src_langs)):
-            words = text.split()
-            if len(words) <= max_words:
-                # If paragraph is within safe limits, translate it as a single chunk
-                flat_texts.append(text)
-                flat_src_langs.append(lang)
-                paragraph_map[p_idx] = [len(flat_texts) - 1]
-            else:
-                # Split large paragraphs on sentence boundaries
-                sentences = split_into_sentences(text)
-                chunks = []
-                current_chunk = []
-                current_count = 0
-                
-                for s in sentences:
-                    s_words = len(s.split())
-                    # Group sentences into sub-chunks up to max_words to retain local context
-                    if current_count + s_words > max_words:
-                        if current_chunk:
-                            # Join sentences with space
-                            chunks.append(" ".join(current_chunk))
-                        current_chunk = [s]
-                        current_count = s_words
-                    else:
-                        current_chunk.append(s)
-                        current_count += s_words
-                if current_chunk:
-                    chunks.append(" ".join(current_chunk))
-                    
-                # Safe Fallback: If a single sentence exceeds max_words and contains no punctuation,
-                # split strictly by word count to protect the NLLB-200 context limits
-                processed_chunks = []
-                for chunk in chunks:
-                    chunk_words = chunk.split()
-                    if len(chunk_words) > max_words:
-                        for i in range(0, len(chunk_words), 150):
-                            processed_chunks.append(" ".join(chunk_words[i : i + 150]))
-                    else:
-                        processed_chunks.append(chunk)
-                        
-                indices = []
-                for chunk in processed_chunks:
-                    flat_texts.append(chunk)
-                    flat_src_langs.append(lang)
-                    indices.append(len(flat_texts) - 1)
-                paragraph_map[p_idx] = indices
-
-        # ----------------- Step 2: Parallel Batch Translation -----------------
-        flat_results: List[str] = []
-        
         # Send the entire list of chunks to CTranslate2 in a single call.
         # This allows CTranslate2 to perform global length sorting to minimize padding,
         # distribute execution across physical CPU cores, and run native batching.
         # Uses thread-safety lock because setting self.tokenizer.src_lang is stateful.
         batch_tokens: List[List[str]] = []
         with self.lock:
-            for text, src_lang in zip(flat_texts, flat_src_langs):
+            for text, src_lang in zip(texts, src_langs):
                 self.tokenizer.src_lang = src_lang
                 tokens = self.tokenizer.convert_ids_to_tokens(
                     self.tokenizer.encode(text)
                 )
                 batch_tokens.append(tokens)
 
-        target_prefixes = [[target_lang] for _ in flat_texts]
+        target_prefixes = [[target_lang] for _ in texts]
         
         try:
             # Execute CTranslate2 batch translation with optimized parameters:
@@ -306,6 +286,7 @@ class TranslationEngine:
             )
 
             # Decode the translations back to string outputs under tokenizer lock
+            flat_results = []
             with self.lock:
                 for result in results:
                     translated_tokens = result.hypotheses[0]
@@ -319,20 +300,8 @@ class TranslationEngine:
 
         except Exception as e:
             logger.error(f"Error during translation batch: {e}", exc_info=True)
-            for text in flat_texts:
+            flat_results = []
+            for text in texts:
                 flat_results.append(f"[Translation Failed] {text}")
 
-        # ----------------- Step 3: Format-Aware Reassembly (Unflattening) -----------------
-        translated_results: List[str] = []
-        for p_idx in range(len(texts)):
-            chunk_indices = paragraph_map[p_idx]
-            chunk_translations = [flat_results[idx] for idx in chunk_indices]
-            original_text = texts[p_idx]
-            
-            # Preserve original visual layout: join with newlines if they existed in the source
-            if "\n" in original_text:
-                translated_results.append("\n".join(chunk_translations))
-            else:
-                translated_results.append(" ".join(chunk_translations))
-
-        return translated_results
+        return flat_results
