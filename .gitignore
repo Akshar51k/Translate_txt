@@ -24,3 +24,7 @@ models/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Logs
+backend/backend.log
+frontend/frontend.log
