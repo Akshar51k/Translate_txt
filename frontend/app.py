@@ -1,6 +1,7 @@
 import logging
 import os
 import requests
+import time
 from typing import Optional, List, Dict, Any
 import streamlit as st
 from dotenv import load_dotenv
@@ -314,32 +315,25 @@ def main():
 
     st.markdown("### 📄 Upload Document")
 
-    uploaded_file = st.file_uploader(
-        "Select a UTF-8 encoded text file (.txt)", 
+    uploaded_files = st.file_uploader(
+        "Select UTF-8 encoded text files (.txt)", 
         type=["txt"],
-        help="The file will be read, split by double newlines into paragraphs, and sent to the API backend for translation."
+        accept_multiple_files=True,
+        help="Upload one or more files to translate them sequentially."
     )
     
-    if uploaded_file is not None:
-        try:
-            # Read file as UTF-8
-            file_bytes = uploaded_file.read()
-            content = file_bytes.decode("utf-8")
-        except UnicodeDecodeError:
-            st.error("Error decoding file: Please ensure the file is encoded in UTF-8 format.")
-            return
+    if uploaded_files:
+        # Initialize translation results storage in session state
+        if "translation_results" not in st.session_state:
+            st.session_state.translation_results = {}
             
-        if not content.strip():
-            st.warning("The uploaded file is empty. Please upload a file containing text.")
-            return
-            
-        # Normalize all types of line endings to standard LF (\n) to prevent paragraph splitting issues on Windows
-        normalized_content = content.replace("\r\n", "\n").replace("\r", "\n")
+        # Clean up session state keys that are no longer uploaded
+        uploaded_keys = {f"{f.name}_{f.size}" for f in uploaded_files}
+        st.session_state.translation_results = {
+            k: v for k, v in st.session_state.translation_results.items() if k in uploaded_keys
+        }
         
-        # Split text into paragraphs (separated by double newlines)
-        paragraphs = [p for p in normalized_content.split("\n\n")]
-        
-        st.info(f"Loaded file successfully. Found **{len(paragraphs)}** paragraphs.")
+        st.info(f"Loaded **{len(uploaded_files)}** files successfully.")
         
         # Disable translation button if backend is not reachable
         btn_disabled = not backend_healthy
@@ -348,31 +342,111 @@ def main():
             st.warning("⚠️ **Backend unreachable:** Please launch the translation API backend or verify the URL settings in the sidebar.")
             
         if st.button("🚀 Start Translation Process", type="primary", key="btn_translate", disabled=btn_disabled):
-            logger.info(f"Start Translation Process triggered for file: {uploaded_file.name} to {backend_url}")
+            logger.info(f"Start Translation Process triggered for {len(uploaded_files)} files")
             
-            with st.spinner("Sending document to translation API... Translation may take a moment depending on file size."):
+            # Setup sequential progress bar
+            main_progress_bar = st.progress(0.0)
+            main_progress_text = st.empty()
+            
+            for file_idx, file in enumerate(uploaded_files):
+                file_key = f"{file.name}_{file.size}"
+                main_progress_text.markdown(f"**Processing file {file_idx + 1} of {len(uploaded_files)}: `{file.name}`...**")
+                
                 try:
-                    payload = {
-                        "paragraphs": paragraphs,
-                        "confidence_threshold": confidence_threshold,
-                        "batch_size": batch_size
+                    file_bytes = file.read()
+                    file.seek(0)  # Reset stream position
+                    content = file_bytes.decode("utf-8")
+                except UnicodeDecodeError:
+                    st.session_state.translation_results[file_key] = {
+                        "success": False,
+                        "name": file.name,
+                        "error": "Failed to decode UTF-8 format."
                     }
+                    continue
                     
-                    response = requests.post(
-                        f"{backend_url.rstrip('/')}/translate",
-                        json=payload,
-                        timeout=300  # 5 minute timeout for very large documents
-                    )
+                if not content.strip():
+                    st.session_state.translation_results[file_key] = {
+                        "success": False,
+                        "name": file.name,
+                        "error": "The uploaded file is empty."
+                    }
+                    continue
                     
-                    if response.status_code == 200:
-                        res_data = response.json()
+                # Normalize and split paragraphs
+                normalized_content = content.replace("\r\n", "\n").replace("\r", "\n")
+                paragraphs = [p for p in normalized_content.split("\n\n")]
+                
+                with st.spinner(f"Translating `{file.name}` ({len(paragraphs)} paragraphs)..."):
+                    try:
+                        payload = {
+                            "paragraphs": paragraphs,
+                            "confidence_threshold": confidence_threshold,
+                            "batch_size": batch_size
+                        }
+                        
+                        response = requests.post(
+                            f"{backend_url.rstrip('/')}/translate",
+                            json=payload,
+                            timeout=300
+                        )
+                        
+                        if response.status_code == 200:
+                            st.session_state.translation_results[file_key] = {
+                                "success": True,
+                                "name": file.name,
+                                "data": response.json()
+                            }
+                        else:
+                            st.session_state.translation_results[file_key] = {
+                                "success": False,
+                                "name": file.name,
+                                "error": f"API Error: Status {response.status_code} - {response.text}"
+                            }
+                    except Exception as e:
+                        st.session_state.translation_results[file_key] = {
+                            "success": False,
+                            "name": file.name,
+                            "error": f"Connection Error: {str(e)}"
+                        }
+                
+                # Update main progress bar
+                main_progress_bar.progress((file_idx + 1) / len(uploaded_files))
+                
+            main_progress_text.success("🎉 All files processed!")
+            time.sleep(1)
+            main_progress_bar.empty()
+            main_progress_text.empty()
+            
+        # Display Results Section if there is any data processed
+        if st.session_state.translation_results:
+            st.markdown("### 📊 Translation Results")
+            
+            for file in uploaded_files:
+                file_key = f"{file.name}_{file.size}"
+                
+                if file_key in st.session_state.translation_results:
+                    result = st.session_state.translation_results[file_key]
+                    
+                    # Set accordion title based on success status
+                    expander_title = f"📄 {file.name} "
+                    if result["success"]:
+                        expander_title += "✅ Ready"
+                    else:
+                        expander_title += "❌ Failed"
+                        
+                    with st.expander(expander_title, expanded=True):
+                        if not result["success"]:
+                            st.error(f"Failed to translate: {result['error']}")
+                            continue
+                            
+                        res_data = result["data"]
                         translated_text = res_data["translated_text"]
                         metrics = res_data["metrics"]
                         comparison_data = res_data["comparison_data"]
                         device_used = res_data["device_used"]
                         elapsed_seconds = res_data["elapsed_seconds"]
                         
-                        st.success(f"🎉 Translation completed successfully on {device_display if backend_healthy else device_used} in {elapsed_seconds:.2f} seconds!")
+                        st.success(f"Translation completed successfully on {device_display if backend_healthy else device_used} in {elapsed_seconds:.2f} seconds!")
                         
                         # Render visual metrics
                         st.markdown(f"""
@@ -396,21 +470,19 @@ def main():
                             </div>
                         """, unsafe_allow_html=True)
                         
-                        # Render Download Panel
-                        st.markdown("### 📥 Download Results")
+                        # Individual download button
                         st.download_button(
-                            label=f"💾 Download {uploaded_file.name}",
+                            label=f"💾 Download {file.name}",
                             data=translated_text,
-                            file_name=uploaded_file.name,
+                            file_name=file.name,
                             mime="text/plain",
                             type="primary",
-                            key="btn_download"
+                            key=f"btn_dl_{file_key}"
                         )
                         
                         # Render Comparison List
-                        st.markdown("### 🔍 Paragraph-by-Paragraph Comparison")
+                        st.markdown("#### 🔍 Paragraph-by-Paragraph Comparison")
                         
-                        # HTML generation for side-by-side comparison
                         html_rows = []
                         for row in comparison_data:
                             if row["action"] == "Empty":
@@ -456,19 +528,11 @@ def main():
                                 </div>
                             """)
                             
-                        # Render comparison list
                         if html_rows:
                             clean_html = "".join(html_rows).replace("\n", "").replace("\r", "")
                             st.markdown(f'<div class="translation-list">{clean_html}</div>', unsafe_allow_html=True)
                         else:
                             st.info("No content paragraphs to compare.")
-                    else:
-                        st.error(f"Error from translation server: Status Code {response.status_code}")
-                        st.text(response.text)
-                        
-                except Exception as e:
-                    st.error(f"Failed to communicate with the translation backend: {e}")
-                    st.info("Please make sure your FastAPI backend server is running and accessible at the specified URL.")
 
 if __name__ == "__main__":
     main()
